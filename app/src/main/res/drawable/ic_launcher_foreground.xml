@@ -1,0 +1,24 @@
+<vector android:height="108dp" android:viewportHeight="48"
+    android:viewportWidth="48" android:width="108dp"
+    xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillAlpha="0.02" android:fillColor="#2da877"
+        android:fillType="nonZero"
+        android:pathData="M7,43c-1.1046,0 -2,-0.8954 -2,-2v-34c0,-1.1046 0.8954,-2 2,-2h34c1.1046,0 2,0.8954 2,2v34c0,1.1046 -0.8954,2 -2,2z"
+        android:strokeColor="#00000000" android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" android:strokeWidth="1"/>
+    <path android:fillType="nonZero"
+        android:pathData="M24,14.2299l19,19l0,5.8914l-19.977,-19.977v-4.9144zM17.1609,29.4566l5.4566,-5.4566l-6.4336,-6.4336l1.3825,-1.3825l25.359,25.359c-0.1877,0.6668 -0.7124,1.1925 -1.3787,1.3814l-11.1083,-11.1083l1.3776,-1.3825l-9.1986,-6.4336l18.9254,18.9254c-0.1726,0.0486 -0.3548,0.0746 -0.5429,0.0746h-3.0512l-0.5716,-0.5716l-0.5716,0.5716l-6.1014,0z"
+        android:strokeColor="#00000000" android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" android:strokeWidth="1">
+        <aapt:attr name="android:fillColor">
+            <gradient android:endX="48.4102" android:endY="48.4102"
+                android:startX="16.18391" android:startY="14.22989" android:type="linear">
+                <item android:color="#4C000000" android:offset="0"/>
+                <item android:color="#00000000" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:fillColor="#ffffff" android:fillType="nonZero"
+        android:pathData="M24.977,21.0983l-1.954,-1.954v-4.9144h0.977l5.5787,5.5787l-2.9457,2.9457l-1.3825,-1.3825l1.5632,-1.5632l-1.8368,-1.8368zM31.8161,30.4336l-1.3776,1.3825l-2.2422,-2.2422l-4.1963,4.1963h-0.977v-7.4106l-4.4796,4.4796l-1.3825,-1.3825l5.4566,-5.4566l-6.4336,-6.4336l1.3825,-1.3825zM26.8138,28.1963l-1.8368,-1.8368v3.6687z"
+        android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0"/>
+</vector>

@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Greentooth</string>
+    <string name="toggle_greentooth">Toggle Greentooth</string>
+    <string name="time_20">20 seconds</string>
+    <string name="time_30">30 seconds</string>
+    <string name="time_60">1 minute</string>
+    <string name="time_90">1 minute 30 seconds</string>
+    <string name="time_120">2 minutes</string>
+    <string-array name="wait_entries">
+        <item>@string/time_20</item>
+        <item>@string/time_30</item>
+        <item>@string/time_60</item>
+        <item>@string/time_90</item>
+        <item>@string/time_120</item>
+    </string-array>
+    <string name="channel_id">Green_Channel</string>
+    <string name="channel_name">Greentooth Channel</string>
+    <string name="channel_description">Greentooth Notification Channel</string>
+    <string name="preference_name">Greentooth</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+</resources>
