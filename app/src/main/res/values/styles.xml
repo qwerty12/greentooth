@@ -3,13 +3,28 @@
     <!-- Base application theme. -->
     <!-- TODO: Add all material component color styles -->
     <!-- TODO: Make dark theme -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:windowBackground">@color/colorWindowBackground</item>-->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Main color definitions -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryColorVariant</item>
+        <item name="colorOnPrimary">@color/onPrimaryColor</item>
+        <item name="colorSecondary">#64b358</item>
+        <item name="colorSecondaryVariant">#96e686</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorPrimaryDark">#005500</item>
+        <item name="colorOnPrimarySurface">#FFFFFF</item>
+
     </style>
+
+    <style name="ThemeOverlay_Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <!-- color used by the toolbar title -->
+        <item name="android:textColorPrimary">@color/onPrimaryColor</item>
+        <!-- color used by navigation icon and overflow icon -->
+        <item name="colorOnPrimary">@color/onPrimaryColor</item>
+    </style>
+
+
+
 
     <style name="CustomSwitchText">
         <item name="android:textColor">#0E0E0E</item>

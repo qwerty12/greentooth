@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4FC553</color>
+<!--    <color name="colorPrimary">#4FC553</color>
     <color name="colorPrimaryDark">#2E7D32</color>
     <color name="colorAccent">#81C784</color>
-    <color name="colorWindowBackground">#FFFFFF</color>
+    <color name="colorWindowBackground">#FFFFFF</color>-->
+    <color name="primaryColor">#32832B</color>
+    <color name="primaryColorVariant">#1f7745</color>
+    <color name="onPrimaryColor">#FFFFFF</color>
 
 </resources>

@@ -17,10 +17,11 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:menu="@menu/main_menu"
-            app:title="Greentooth" />
+            app:title="Greentooth"
+            android:theme="@style/ThemeOverlay_Toolbar"
+            app:popupTheme="@style/Theme.MaterialComponents.DayNight"
+            />
 
 
 

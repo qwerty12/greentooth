@@ -12,6 +12,9 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     viewBinding.enabled = false
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 
     defaultConfig {
         applicationId "com.greentooth"
