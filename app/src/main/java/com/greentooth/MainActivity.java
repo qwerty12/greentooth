@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_main);
-        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         final SharedPreferences sharedPreferences = this.getSharedPreferences(this.getString(
                 R.string.preference_name), 0);
