@@ -75,7 +75,7 @@
 
             <!-- TODO: Make single settings card -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/waitCard"
+                android:id="@+id/timeCard"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"

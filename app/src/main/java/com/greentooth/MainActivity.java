@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        MaterialCardView waitCard = findViewById(R.id.waitCard);
+        MaterialCardView waitCard = findViewById(R.id.timeCard);
         waitCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

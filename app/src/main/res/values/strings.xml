@@ -19,4 +19,7 @@
     <string name="preference_name">Greentooth</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+    <string name="about_string">Greentooth Alpha 1. All rights reserved.</string>
+    <string name="about_button_positive">OK</string>
+    <string name="about_menu_title">About</string>
 </resources>

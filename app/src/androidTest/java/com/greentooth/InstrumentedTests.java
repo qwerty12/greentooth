@@ -7,7 +7,6 @@ import android.widget.Checkable;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import org.hamcrest.BaseMatcher;
@@ -16,11 +15,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.Assert.assertEquals;
 
@@ -69,7 +77,7 @@ public class InstrumentedTests {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Context appContext = getInstrumentation().getTargetContext();
 
         assertEquals("com.greentooth", appContext.getPackageName());
     }
@@ -85,4 +93,44 @@ public class InstrumentedTests {
         onView(withId(R.id.switchCard)).perform(click());
         onView(withId(R.id.onSwitch)).check(matches(isChecked()));
     }
+
+    public void userCanClickNotifSwitch() {
+        onView(withId(R.id.notifSwitch)).perform(setChecked(true)).check(matches(isChecked()));
+    }
+
+    @Test
+    public void notifCardWorksAsSwitch() {
+        onView(withId(R.id.notifSwitch)).perform(setChecked(false));
+        onView(withId(R.id.notifCard)).perform(click());
+        onView(withId(R.id.notifSwitch)).check(matches(isChecked()));
+    }
+
+    @Test
+    public void userCanSelectTimeSpinnerOptions() {
+        for (String selectionText: getInstrumentation().getTargetContext().getResources().
+                getStringArray(R.array.wait_entries)) {
+            onView(withId(R.id.timeSpinner)).perform(click());
+            onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
+            onView(withId(R.id.timeSpinner)).check(matches(withSpinnerText(containsString(selectionText))));
+        }
+    }
+
+    @Test
+    public void timeCardWorksAsSpinner() {
+        for (String selectionText: getInstrumentation().getTargetContext().getResources().
+                getStringArray(R.array.wait_entries)) {
+            onView(withId(R.id.timeCard)).perform(click());
+            onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
+            onView(withId(R.id.timeSpinner)).check(matches(withSpinnerText(containsString(selectionText))));
+        }
+    }
+
+    @Test
+    public void userCanClickAbout() {
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText(R.string.about_menu_title)).perform(click());
+        onView(withId(android.R.id.message)).check(matches(withText(R.string.about_string)));
+        onView(withText(R.string.about_button_positive)).perform(click());
+    }
+
 }

@@ -15,9 +15,9 @@ public class AboutFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Greentooth Alpha 1. All rights reserved.")
+        builder.setMessage(R.string.about_string)
                 .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.about_button_positive, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int id) {
                         dialogInterface.dismiss();
                     }
