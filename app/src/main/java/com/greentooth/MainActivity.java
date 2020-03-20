@@ -105,8 +105,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
         Spinner timeSpinner = findViewById(R.id.timeSpinner);
         SwitchCompat onSwitch = findViewById(R.id.onSwitch);
+        SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
         timeSpinner.setSelection(sharedPreferences.getInt("spinner_position", 0));
         onSwitch.setChecked(sharedPreferences.getBoolean("isEnabled", false));
+        notifSwitch.setChecked(sharedPreferences.getBoolean("enableNotifications", false));
     }
 
     @Override
