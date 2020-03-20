@@ -3,10 +3,13 @@ package com.greentooth;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Checkable;
 
@@ -21,6 +24,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -171,25 +177,15 @@ public class InstrumentedTests {
         if (!hasBluetooth()) {
             return null;
         }
-        final int TIME_LIMIT = 5000;
-        final int WAIT_TIME = 1000;
         BluetoothManager bluetoothManager = (BluetoothManager) targetContext.getSystemService(Context.BLUETOOTH_SERVICE);
         if (bluetoothManager == null) {
             return null;
         }
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-        if (!bluetoothAdapter.isEnabled()) {
-            bluetoothAdapter.enable();
-            // Activating Bluetooth takes a couple of seconds
-            int totalWait = 0;
-            while (!bluetoothAdapter.isEnabled() && totalWait < TIME_LIMIT) {
-                try {
-                    Thread.sleep(WAIT_TIME);
-                    totalWait += WAIT_TIME;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        try {
+            enableBluetooth(bluetoothAdapter);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         //Run without delay for tests
         sharedPreferences.edit().putInt("wait_time", 0).apply();
@@ -224,6 +220,34 @@ public class InstrumentedTests {
         if (bluetoothAdapter != null) {
             assertTrue(bluetoothAdapter.isEnabled());
         }
+    }
+
+    public boolean enableBluetooth(final BluetoothAdapter bluetoothAdapter) throws InterruptedException {
+        boolean enabled;
+        if (bluetoothAdapter.isEnabled()) {
+            enabled = true;
+        } else {
+            final int WAIT_TIME = 10;
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
+            final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
+                        if (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0) == BluetoothAdapter.STATE_ON) {
+                            countDownLatch.countDown();
+                        }
+                    }
+                }
+            };
+            targetContext.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+            enabled = bluetoothAdapter.enable();
+            countDownLatch.await(WAIT_TIME, TimeUnit.SECONDS);
+            targetContext.unregisterReceiver(broadcastReceiver);
+            if (countDownLatch.getCount() != 0L) {
+                Log.d("enableBluetooth", "Activation broadcast not received in time.");
+            }
+        }
+        return enabled;
     }
 
 
