@@ -23,7 +23,7 @@ public class GreenApplication extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             String channel_id = getString(R.string.channel_id);
             NotificationChannel channel = new NotificationChannel(channel_id, name, importance);
             channel.setDescription(description);
