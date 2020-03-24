@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.Checkable;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -113,6 +115,7 @@ public class InstrumentedTests {
 
     @Test
     public void userCanClickOnSwitch() {
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
         onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
         boolean isEnabled = sharedPreferences.getBoolean("isEnabled", false);
         assertTrue(isEnabled);
@@ -123,6 +126,7 @@ public class InstrumentedTests {
 
     @Test
     public void switchCardWorksAsSwitch() {
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
         onView(withId(R.id.onSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
         onView(withId(R.id.switchCard)).perform(click());
         onView(withId(R.id.onSwitch)).check(matches(isChecked()));
@@ -135,18 +139,23 @@ public class InstrumentedTests {
     }
 
     public void userCanClickNotifSwitch() {
+        onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo());
         onView(withId(R.id.notifSwitch)).perform(setChecked(true)).check(matches(isChecked()));
     }
 
     @Test
     public void notifCardWorksAsSwitch() {
+        onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo());
         onView(withId(R.id.notifSwitch)).perform(setChecked(false));
+        onView((withId(R.id.notifCard))).perform(ViewActions.scrollTo());
         onView(withId(R.id.notifCard)).perform(click());
+        onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo());
         onView(withId(R.id.notifSwitch)).check(matches(isChecked()));
     }
 
     @Test
     public void userCanSelectTimeSpinnerOptions() {
+        onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
         for (String selectionText: targetContext.getResources().
                 getStringArray(R.array.wait_entries)) {
             onView(withId(R.id.timeSpinner)).perform(click());
@@ -157,10 +166,13 @@ public class InstrumentedTests {
 
     @Test
     public void timeCardWorksAsSpinner() {
+        onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
         for (String selectionText : targetContext.getResources().
                 getStringArray(R.array.wait_entries)) {
+            onView((withId(R.id.timeCard))).perform(ViewActions.scrollTo());
             onView(withId(R.id.timeCard)).perform(click());
             onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
+            onView((withId(R.id.timeSpinner))).perform(ViewActions.scrollTo());
             onView(withId(R.id.timeSpinner)).check(matches(withSpinnerText(containsString(selectionText))));
         }
     }
@@ -174,25 +186,20 @@ public class InstrumentedTests {
     }
 
     public BluetoothAdapter bluetoothTestHelper(Boolean testArg) {
-        if (!hasBluetooth()) {
+        if (!hasBluetooth() || isEmulator()) {
             return null;
         }
         BluetoothManager bluetoothManager = (BluetoothManager) targetContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        if (bluetoothManager == null) {
-            return null;
-        }
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-        try {
-            enableBluetooth(bluetoothAdapter);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        enableBluetooth(bluetoothAdapter);
         //Run without delay for tests
         sharedPreferences.edit().putInt("wait_time", 0).apply();
         //Setting the switch doesn't seem to be enough, maybe due to threading shenanigans so notifications
         //are enabled manually
         sharedPreferences.edit().putBoolean("enableNotifications", true).apply();
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
         onView(withId(R.id.onSwitch)).perform(setChecked(testArg));
+        onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo());
         onView(withId(R.id.notifSwitch)).perform(setChecked(true));
         initializeTestWorkManager(targetContext);
         Intent intent = new Intent(BluetoothDevice.ACTION_ACL_DISCONNECTED);
@@ -202,6 +209,11 @@ public class InstrumentedTests {
     }
 
     public boolean hasBluetooth() {
+        try {
+            BluetoothManager bluetoothManager = (BluetoothManager) targetContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        } catch (NoClassDefFoundError e) {
+            return false;
+        }
         return targetContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
     }
 
@@ -222,7 +234,7 @@ public class InstrumentedTests {
         }
     }
 
-    public boolean enableBluetooth(final BluetoothAdapter bluetoothAdapter) throws InterruptedException {
+    public boolean enableBluetooth(final BluetoothAdapter bluetoothAdapter) {
         boolean enabled;
         if (bluetoothAdapter.isEnabled()) {
             enabled = true;
@@ -241,13 +253,37 @@ public class InstrumentedTests {
             };
             targetContext.registerReceiver(broadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
             enabled = bluetoothAdapter.enable();
-            countDownLatch.await(WAIT_TIME, TimeUnit.SECONDS);
+            try {
+                countDownLatch.await(WAIT_TIME, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                enabled = false;
+            }
             targetContext.unregisterReceiver(broadcastReceiver);
             if (countDownLatch.getCount() != 0L) {
                 Log.d("enableBluetooth", "Activation broadcast not received in time.");
             }
         }
         return enabled;
+    }
+
+    private boolean isEmulator() {
+        return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
+                || Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.HARDWARE.contains("goldfish")
+                || Build.HARDWARE.contains("ranchu")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.PRODUCT.contains("sdk_google")
+                || Build.PRODUCT.contains("google_sdk")
+                || Build.PRODUCT.contains("sdk")
+                || Build.PRODUCT.contains("sdk_x86")
+                || Build.PRODUCT.contains("vbox86p")
+                || Build.PRODUCT.contains("emulator")
+                || Build.PRODUCT.contains("simulator");
     }
 
 
