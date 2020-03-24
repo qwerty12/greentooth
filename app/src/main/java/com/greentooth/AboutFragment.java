@@ -18,6 +18,7 @@ package com.greentooth;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -31,8 +32,24 @@ public class AboutFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.about_string)
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Greentooth version ");
+        //In case something goes wrong
+        String version = "1.0";
+        try {
+            version = getContext().getPackageManager().getPackageInfo(
+                    "com.greentooth", 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        stringBuilder.append(version);
+        stringBuilder.append(getContext().getText(R.string.about_string));
+        builder.setMessage(stringBuilder.toString())
                 .setCancelable(false)
+                .setTitle("About")
+                .setIcon(R.drawable.ic_launcher)
                 .setPositiveButton(R.string.about_button_positive, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int id) {
                         dialogInterface.dismiss();

@@ -19,7 +19,7 @@
     <string name="preference_name">Greentooth</string>
     <string name="on">On</string>
     <string name="off">Off</string>
-    <string name="about_string">Greentooth Alpha 1. All rights reserved.</string>
+    <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\nMaterial Design Icon by Google also under Apache Version 2.0 License.</string>
     <string name="about_button_positive">OK</string>
     <string name="about_menu_title">About</string>
 </resources>
