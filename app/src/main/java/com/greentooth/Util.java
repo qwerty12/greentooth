@@ -16,12 +16,10 @@
 
 package com.greentooth;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -71,14 +69,11 @@ class Util {
                 .setColorized(true)
                 .setColor(Color.GREEN)
                 .setLights(Color.rgb(31, 85, 244), 200, 200)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                // Set the intent that will fire when the user taps the notification
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-        // notificationId is a unique int for each notification that you must define
-        int notificationId = getNextNotifId(context);
+        int notificationId = getNextNotificationId(context);
         notificationManager.notify(notificationId, builder.build());
     }
 
@@ -98,24 +93,15 @@ class Util {
         return true;
     }
 
-    private static final String PREFERENCE_LAST_NOTIF_ID = "PREFERENCE_LAST_NOTIF_ID";
-
-    private static int getNextNotifId(Context context) {
+    private static int getNextNotificationId(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(
                 R.string.preference_name),0);
-        int id = sharedPreferences.getInt(PREFERENCE_LAST_NOTIF_ID, 0) + 1;
-        if (id == Integer.MAX_VALUE) { id = 0; } // isn't this over kill ??? hahaha!!  ^_^
-        sharedPreferences.edit().putInt(PREFERENCE_LAST_NOTIF_ID, id).apply();
+        int id = sharedPreferences.getInt("lastNotificationId", 0) + 1;
+        if (id == Integer.MAX_VALUE) {
+            id = 0;
+        }
+        sharedPreferences.edit().putInt("lastNotificationId", id).apply();
         return id;
     }
 
-    /**
-     * Get activity instance from desired context.
-     */
-    public static Activity getActivity(Context context) {
-        if (context == null) return null;
-        if (context instanceof Activity) return (Activity) context;
-        if (context instanceof ContextWrapper) return getActivity(((ContextWrapper)context).getBaseContext());
-        return null;
-    }
 }
