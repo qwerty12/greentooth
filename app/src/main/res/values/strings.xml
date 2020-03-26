@@ -19,11 +19,17 @@
     <string name="preference_name">Greentooth</string>
     <string name="on">On</string>
     <string name="off">Off</string>
-    <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\nMaterial Design Icon by Google also under Apache Version 2.0 License.</string>
+    <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\nMaterial Design Icon by Google\nSPDX-License-Identifier: Apache-2.0</string>
     <string name="about_button_positive">OK</string>
     <string name="about_menu_title">About</string>
     <string name="themes_menu">Themes</string>
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="default_theme">Default Theme</string>
+    <string name="switch_description">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected.</string>
+    <string name="switch_title">Enable Greentooth</string>
+    <string name="wait_title">Wait time</string>
+    <string name="wait_desc">The minimum wait time before Bluetooth is turned off. Please note that this is just a minimum delay and it may take a bit longer due to how Android works.</string>
+    <string name="notifications">Notifications</string>
+    <string name="notif_desc">Send a notification when Greentooth has disabled Bluetooth.</string>
 </resources>

@@ -42,22 +42,22 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/switchTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:padding="8dp"
-                        android:text="Enable Greentooth"
+                        android:text="@string/switch_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/switchDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"
-                        android:text="Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected." />
+                        android:text="@string/switch_description" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/onSwitch"
@@ -66,14 +66,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_horizontal"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:padding="8dp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- TODO: Make single settings card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/timeCard"
                 android:clickable="true"
@@ -90,23 +89,23 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/waitTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:padding="8dp"
-                        android:text="Wait time"
+                        android:text="@string/wait_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:layout_marginLeft="8dp" />
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/waitDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"
-                        android:text="The minimum wait time before Bluetooth is turned off. Please note that this is just a minimum delay and it may take a bit longer due to how Android works." />
+                        android:text="@string/wait_desc" />
 
                     <Spinner
                         android:id="@+id/timeSpinner"
@@ -119,12 +118,6 @@
                         android:entries="@array/wait_entries"
                         android:padding="8dp"
                         android:spinnerMode="dialog" />
-
-                    <View
-                        android:id="@+id/divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
 
                 </LinearLayout>
 
@@ -142,26 +135,25 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/notifTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:padding="8dp"
-                        android:text="Notifications"
+                        android:text="@string/notifications"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/notifDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"
-                        android:text="Send a notification when Greentooth has disabled Bluetooth." />
+                        android:text="@string/notif_desc" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/notifSwitch"
@@ -170,7 +162,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_horizontal"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:padding="8dp" />
 
