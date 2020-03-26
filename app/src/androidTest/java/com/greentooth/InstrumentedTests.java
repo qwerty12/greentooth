@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Checkable;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
@@ -34,6 +35,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -179,10 +181,37 @@ public class InstrumentedTests {
 
     @Test
     public void userCanClickAbout() {
+        onView(withId(R.id.toolbar)).perform(scrollTo());
         openActionBarOverflowOrOptionsMenu(targetContext);
         onView(withText(R.string.about_menu_title)).perform(click());
-        onView(withId(android.R.id.message)).check(matches(withText(R.string.about_string)));
+        onView(withId(android.R.id.message)).check(matches(withText(containsString(targetContext.getString(R.string.about_string)))));
         onView(withText(R.string.about_button_positive)).perform(click());
+    }
+
+    public void openThemesMenu() {
+        onView(withId(R.id.toolbar)).perform(scrollTo());
+        openActionBarOverflowOrOptionsMenu(targetContext);
+        onView(withText(R.string.themes_menu)).perform(click());
+    }
+
+    @Test
+    public void userCanSetTheme() {
+        openThemesMenu();
+        onView(withText(R.string.light_theme)).perform(click());
+        int mode = AppCompatDelegate.getDefaultNightMode();
+        assertEquals(AppCompatDelegate.MODE_NIGHT_NO, mode);
+        openThemesMenu();
+        onView(withText(R.string.dark_theme)).perform(click());
+        mode = AppCompatDelegate.getDefaultNightMode();
+        assertEquals(AppCompatDelegate.MODE_NIGHT_YES, mode);
+        openThemesMenu();
+        onView(withText(R.string.default_theme)).perform(click());
+        mode = AppCompatDelegate.getDefaultNightMode();
+        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || Build.MODEL.equals("SM-G950F")) {
+            assertEquals(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, mode);
+        } else {
+            assertEquals(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, mode);
+        }
     }
 
     public BluetoothAdapter bluetoothTestHelper(Boolean testArg) {

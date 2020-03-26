@@ -16,6 +16,7 @@
 package com.greentooth;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,9 +25,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.android.material.card.MaterialCardView;
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         timeSpinner.setSelection(sharedPreferences.getInt("spinner_position", 0));
         onSwitch.setChecked(sharedPreferences.getBoolean("isEnabled", false));
         notifSwitch.setChecked(sharedPreferences.getBoolean("enableNotifications", false));
+
     }
 
     @Override
@@ -155,15 +159,41 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
+        int themeItemId = sharedPreferences.getInt("theme", R.id.action_default_theme);
+        menu.findItem(themeItemId).setChecked(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
         switch (item.getItemId()) {
             case R.id.action_about:
                 com.greentooth.AboutFragment about = new AboutFragment();
                 about.show(getSupportFragmentManager(), "com.greentooth.AboutFragment");
+                return true;
+            case R.id.action_dark_theme:
+                item.setChecked(true);
+                sharedPreferences.edit().putInt("theme", item.getItemId()).apply();
+                Toast.makeText(this, "Dark theme selected", Toast.LENGTH_SHORT).show();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                return true;
+            case R.id.action_light_theme:
+                item.setChecked(true);
+                sharedPreferences.edit().putInt("theme", item.getItemId()).apply();
+                Toast.makeText(this, "Light theme selected", Toast.LENGTH_SHORT).show();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                return true;
+            case R.id.action_default_theme:
+                item.setChecked(true);
+                sharedPreferences.edit().putInt("theme", item.getItemId()).apply();
+                Toast.makeText(this, "Default theme selected", Toast.LENGTH_SHORT).show();
+                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P) || Build.MODEL.equals("SM-G950F")) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/themes_menu"
+        android:title="@string/themes_menu"
+        app:showAsAction="never">
+        <menu>
+            <group android:id="@+id/theme_group"
+                android:checkableBehavior="single">
+                <item android:id="@+id/action_light_theme"
+                    android:title="@string/light_theme"
+                    app:showAsAction="never" />
+                <item android:id="@+id/action_dark_theme"
+                    android:title="@string/dark_theme"
+                    app:showAsAction="never" />
+                <item android:id="@+id/action_default_theme"
+                    android:title="@string/default_theme"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
     <item android:id="@+id/action_about"
         android:title="@string/about_menu_title"
         app:showAsAction="never" />

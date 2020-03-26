@@ -20,7 +20,10 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class GreenApplication extends Application {
 
@@ -31,6 +34,22 @@ public class GreenApplication extends Application {
         super.onCreate();
         appContext = getApplicationContext();
         createNotificationChannel();
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
+        int themeItemId = sharedPreferences.getInt("theme", R.id.action_default_theme);
+        switch (themeItemId) {
+            case R.id.action_default_theme:
+                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || Build.MODEL.equals("SM-G950F")) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                }
+                break;
+            case R.id.action_dark_theme:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case R.id.action_light_theme:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     private void createNotificationChannel() {
