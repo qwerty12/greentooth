@@ -14,6 +14,7 @@
         <item name="colorPrimaryDark">#005500</item>
         <item name="colorOnPrimarySurface">#FFFFFF</item>
 
+
     </style>
 
     <style name="ThemeOverlay_Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
@@ -21,9 +22,12 @@
         <item name="android:textColorPrimary">@color/onPrimaryColor</item>
         <!-- color used by navigation icon and overflow icon -->
         <item name="colorOnPrimary">@color/onPrimaryColor</item>
+
     </style>
 
-
+    <style name="Menu_Theme" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorControlActivated">#64b358</item>
+    </style>
 
 
     <style name="CustomSwitchText">

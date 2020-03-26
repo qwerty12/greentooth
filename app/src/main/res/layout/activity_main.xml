@@ -20,7 +20,7 @@
             app:menu="@menu/main_menu"
             app:title="Greentooth"
             android:theme="@style/ThemeOverlay_Toolbar"
-            app:popupTheme="@style/Theme.MaterialComponents.DayNight"
+            app:popupTheme="@style/Menu_Theme"
             />
 
 
@@ -109,15 +109,18 @@
 
                     <Spinner
                         android:id="@+id/timeSpinner"
-                        android:duplicateParentState="true"
+                        style="@style/Widget.AppCompat.Spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="end"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_marginBottom="8dp"
+                        android:duplicateParentState="true"
                         android:entries="@array/wait_entries"
                         android:padding="8dp"
-                        android:spinnerMode="dialog" />
+                        android:spinnerMode="dropdown" />
 
                 </LinearLayout>
 
