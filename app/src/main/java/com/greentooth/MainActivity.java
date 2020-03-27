@@ -39,22 +39,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
         androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         final SharedPreferences sharedPreferences = this.getSharedPreferences(this.getString(
                 R.string.preference_name), 0);
         SwitchCompat onSwitch = findViewById(R.id.onSwitch);
-
         onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferences.edit().putBoolean("isEnabled", isChecked).apply();
             }
         });
-
         Spinner timeSpinner = findViewById(R.id.timeSpinner);
 
         MaterialCardView switchCard = findViewById(R.id.switchCard);
@@ -65,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 onSwitch.setChecked(!onSwitch.isChecked());
             }
         });
-
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -79,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 // *tumbleweeds roll by*
             }
         });
-
         MaterialCardView waitCard = findViewById(R.id.timeCard);
         waitCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 timeSpinner.performClick();
             }
         });
-
         SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
         notifSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -104,17 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 notifSwitch.setChecked(!notifSwitch.isChecked());
             }
         });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 
     @Override
@@ -127,32 +109,6 @@ public class MainActivity extends AppCompatActivity {
         timeSpinner.setSelection(sharedPreferences.getInt("spinner_position", 0));
         onSwitch.setChecked(sharedPreferences.getBoolean("isEnabled", false));
         notifSwitch.setChecked(sharedPreferences.getBoolean("enableNotifications", false));
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -199,8 +155,4 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
-
 }

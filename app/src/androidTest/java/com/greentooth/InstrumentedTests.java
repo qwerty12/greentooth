@@ -19,7 +19,12 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.SdkSuppress;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.Until;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -43,6 +48,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.work.testing.WorkManagerTestInitHelper.initializeTestWorkManager;
+import static com.greentooth.Util.SendNotification;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -61,6 +67,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class InstrumentedTests {
 
+    private static final long TIMEOUT = 15;
     private SharedPreferences sharedPreferences;
     private Context targetContext;
 
@@ -214,6 +221,22 @@ public class InstrumentedTests {
         }
     }
 
+    @SdkSuppress(minSdkVersion = 18)
+    @Test
+    public void testNotifications() {
+        final String testTitle = "My Title";
+        final String testText = "My Text";
+        SendNotification(targetContext, testTitle, testText);
+        UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
+        UiObject2 notificationTitle = mDevice.findObject(By.text(testTitle));
+        assertEquals(notificationTitle.getText(), testTitle);
+        UiObject2 notificationText = mDevice.findObject(By.text(testText));
+        assertEquals(notificationText.getText(), testText);
+        notificationText.click();
+    }
+
     public BluetoothAdapter bluetoothTestHelper(Boolean testArg) {
         if (!hasBluetooth() || isEmulator()) {
             return null;
@@ -246,12 +269,18 @@ public class InstrumentedTests {
         return targetContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
     }
 
-
+    @SdkSuppress(minSdkVersion = 18)
     @Test
     public void testToggledOnAppFunction() {
         BluetoothAdapter bluetoothAdapter = bluetoothTestHelper(true);
         if (bluetoothAdapter != null) {
             assertFalse(bluetoothAdapter.isEnabled());
+            UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
+            mDevice.openNotification();
+            mDevice.wait(Until.hasObject(By.textStartsWith("Greentooth")), TIMEOUT);
+            UiObject2 notification = mDevice.findObject(By.textStartsWith("Bluetooth disabled"));
+            assertEquals(notification.getText(), "Bluetooth disabled");
+            notification.click();
         }
     }
 

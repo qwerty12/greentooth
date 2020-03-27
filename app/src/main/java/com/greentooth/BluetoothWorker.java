@@ -19,7 +19,6 @@ package com.greentooth;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -36,6 +35,7 @@ public class BluetoothWorker extends Worker {
         super(context, params);
     }
 
+
     @Override
     public @NonNull
     Result doWork() {
@@ -51,7 +51,6 @@ public class BluetoothWorker extends Worker {
                     Util.SendNotification(context, "Bluetooth disabled",
                             "No devices connected.");
                 }
-                Toast.makeText(context, "Bluetooth disabled.", Toast.LENGTH_SHORT).show();
                 return Result.success();
             } else {
                 return Result.failure();
@@ -59,5 +58,4 @@ public class BluetoothWorker extends Worker {
         }
         return Result.success();
     }
-
 }

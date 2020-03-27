@@ -7,5 +7,6 @@
     <color name="primaryColor">#32832B</color>
     <color name="primaryColorVariant">#1f7745</color>
     <color name="onPrimaryColor">#FFFFFF</color>
+    <color name="colorSecondary">#64b358</color>
 
 </resources>

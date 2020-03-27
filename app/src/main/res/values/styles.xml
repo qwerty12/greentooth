@@ -8,7 +8,7 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryColorVariant</item>
         <item name="colorOnPrimary">@color/onPrimaryColor</item>
-        <item name="colorSecondary">#64b358</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">#96e686</item>
         <item name="colorOnSecondary">#000000</item>
         <item name="colorPrimaryDark">#005500</item>

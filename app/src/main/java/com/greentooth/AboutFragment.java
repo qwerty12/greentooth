@@ -26,7 +26,7 @@ import androidx.fragment.app.DialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-// TODO: Create custom layout with logo
+
 public class AboutFragment extends DialogFragment {
     @NotNull
     @Override

@@ -19,20 +19,17 @@ package com.greentooth;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class GreenApplication extends Application {
 
-    private static Context appContext;
+public class GreenApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        appContext = getApplicationContext();
         createNotificationChannel();
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
         int themeItemId = sharedPreferences.getInt("theme", R.id.action_default_theme);
@@ -71,7 +68,4 @@ public class GreenApplication extends Application {
         }
     }
 
-    public static Context getAppContext() {
-        return appContext;
-    }
 }
