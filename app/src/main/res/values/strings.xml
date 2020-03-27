@@ -22,10 +22,10 @@
     <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\nMaterial Design Icon by Google\nSPDX-License-Identifier: Apache-2.0</string>
     <string name="about_button_positive">OK</string>
     <string name="about_menu_title">About</string>
-    <string name="themes_menu">Themes</string>
-    <string name="light_theme">Light Theme</string>
-    <string name="dark_theme">Dark Theme</string>
-    <string name="default_theme">Default Theme</string>
+    <string name="themes_menu">Theme</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="default_theme">System Default</string>
     <string name="switch_description">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected.</string>
     <string name="switch_title">Enable Greentooth</string>
     <string name="wait_title">Wait time</string>
