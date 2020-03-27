@@ -25,11 +25,11 @@
     <string name="themes_menu">Theme</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
-    <string name="default_theme">System Default</string>
+    <string name="default_theme">System default</string>
     <string name="switch_description">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected.</string>
     <string name="switch_title">Enable Greentooth</string>
-    <string name="wait_title">Wait time</string>
-    <string name="wait_desc">The minimum wait time before Bluetooth is turned off. Please note that this is just a minimum delay and it may take a bit longer due to how Android works.</string>
+    <string name="wait_title">Delay</string>
+    <string name="wait_desc">The minimum delay before Bluetooth is turned off. Please note that this is just a minimum delay and it may take a bit longer due to how Android works.</string>
     <string name="notifications">Notifications</string>
     <string name="notif_desc">Send a notification when Greentooth has disabled Bluetooth.</string>
 </resources>
