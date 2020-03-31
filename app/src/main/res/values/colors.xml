@@ -5,8 +5,11 @@
     <color name="colorAccent">#81C784</color>
     <color name="colorWindowBackground">#FFFFFF</color>-->
     <color name="primaryColor">#32832B</color>
+    <color name="colorOnSurface">#000000</color>
     <color name="primaryColorVariant">#1f7745</color>
     <color name="onPrimaryColor">#FFFFFF</color>
     <color name="colorSecondary">#64b358</color>
+    <color name="switchDisabled">#646464</color>
+    <color name="switchTextColor">#FFFFFF</color>
 
 </resources>

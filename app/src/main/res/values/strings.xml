@@ -29,7 +29,13 @@
     <string name="switch_description">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected.</string>
     <string name="switch_title">Enable Greentooth</string>
     <string name="wait_title">Delay</string>
-    <string name="wait_desc">The minimum delay before Bluetooth is turned off. Please note that this is just a minimum delay and it may take a bit longer due to how Android works.</string>
+    <string name="wait_desc">The minimum delay before Bluetooth is turned off. </string>
     <string name="notifications">Notifications</string>
     <string name="notif_desc">Send a notification when Greentooth has disabled Bluetooth.</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="enabled_desc">Greentooth is enabled and will turn off Bluetooth when it is no longer in use.
+        When the last Bluetooth device has disconnected Greentooth will wait %1$s in order to not disturb any
+        connection/reconnection attempts and then deactivate Bluetooth.</string>
+    <string name="disabled_desc">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected and a small delay has passed.</string>
 </resources>

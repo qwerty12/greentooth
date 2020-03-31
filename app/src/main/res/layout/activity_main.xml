@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,158 +25,219 @@
             app:title="Greentooth" />
 
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/switchCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mtrl_card_spacing"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/switchDisabled"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/switchCard"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/mtrl_card_spacing"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="6dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/switchTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:padding="8dp"
+                    android:text="@string/disabled"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textColor="@color/switchTextColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/onSwitch"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/onSwitch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/onSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:duplicateParentState="true"
+                    android:focusable="false"
+                    android:padding="8dp"
+                    android:theme="@style/CustomSwitch"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/switchTitle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:thumbTint="#FFFFFF" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/switchDesc"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:padding="8dp"
+            android:text="@string/switch_description" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/settingsCard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/mtrl_card_spacing"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/waitTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:padding="8dp"
+                    android:text="@string/wait_title"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:paddingLeft="8dp"
+                    android:text="@string/wait_desc"
+                    app:layout_constraintEnd_toStartOf="@+id/timeSpinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/waitTitle" />
+
+                <Spinner
+                    android:id="@+id/timeSpinner"
+                    style="@style/Widget.AppCompat.Spinner"
+                    android:layout_width="@dimen/_130sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:orientation="vertical">
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:duplicateParentState="false"
+                    android:entries="@array/wait_entries"
+                    android:padding="8dp"
+                    android:spinnerMode="dialog"
+                    app:layout_constraintBottom_toBottomOf="@+id/timeClicker"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.75" />
 
-                    <TextView
-                        android:id="@+id/switchTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:padding="8dp"
-                        android:text="@string/switch_title"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                <View
+                    android:id="@+id/timeClicker"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toTopOf="@+id/divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/switchDesc"
-                        style="@style/TextAppearance.MaterialComponents.Body2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:padding="8dp"
-                        android:text="@string/switch_description" />
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.2"
+                    android:background="@color/colorOnSurface"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView2" />
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/onSwitch"
-                        android:duplicateParentState="true"
-                        android:focusable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_horizontal"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:padding="8dp" />
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/timeCard"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/mtrl_card_spacing"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="20dp">
-
-                <LinearLayout
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/waitTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:padding="8dp"
-                        android:text="@string/wait_title"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
-
-                    <TextView
-                        android:id="@+id/waitDesc"
-                        style="@style/TextAppearance.MaterialComponents.Body2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:padding="8dp"
-                        android:text="@string/wait_desc" />
-
-                    <Spinner
-                        android:id="@+id/timeSpinner"
-                        style="@style/Widget.AppCompat.Spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:duplicateParentState="true"
-                        android:entries="@array/wait_entries"
-                        android:padding="8dp"
-                        android:spinnerMode="dialog" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/notifCard"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/mtrl_card_spacing"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="20dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/notifTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:padding="8dp"
+                    android:text="@string/notifications"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-                    <TextView
-                        android:id="@+id/notifTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:padding="8dp"
-                        android:text="@string/notifications"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/notifSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:duplicateParentState="false"
+                    android:focusable="false"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-                    <TextView
-                        android:id="@+id/notifDesc"
-                        style="@style/TextAppearance.MaterialComponents.Body2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:padding="8dp"
-                        android:text="@string/notif_desc" />
+                <View
+                    android:id="@+id/notifClicker"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/notifSwitch"
-                        android:duplicateParentState="true"
-                        android:focusable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_horizontal"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:padding="8dp" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/notif_desc"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/notifTitle" />
 
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.8" />
 
-        </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
 
 
 

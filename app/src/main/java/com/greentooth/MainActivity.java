@@ -15,6 +15,10 @@
 */
 package com.greentooth;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,16 +29,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
 import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
+    private View settingsView;
+    private int shortAnimationDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +52,27 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         final SharedPreferences sharedPreferences = this.getSharedPreferences(this.getString(
                 R.string.preference_name), 0);
+        settingsView = findViewById(R.id.settingsCard);
+        shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         SwitchCompat onSwitch = findViewById(R.id.onSwitch);
         onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferences.edit().putBoolean("isEnabled", isChecked).apply();
+                TextView switchText = findViewById(R.id.switchTitle);
+                MaterialCardView switchCard = findViewById(R.id.switchCard);
+                final int switchCardDisabledColor = getResources().getColor(R.color.switchDisabled);
+                final int switchCardEnabledColor = getResources().getColor(R.color.primaryColorVariant);
+                if (isChecked) {
+                    switchText.setText(R.string.enabled);
+                    fadeInSettings();
+                    changeCardColor(switchCard, switchCardDisabledColor, switchCardEnabledColor);
+                } else {
+                    switchText.setText(R.string.disabled);
+                    fadeOutSettings();
+                    changeCardColor(switchCard, switchCardEnabledColor, switchCardDisabledColor);
+                }
+                updateDescription();
             }
         });
         Spinner timeSpinner = findViewById(R.id.timeSpinner);
@@ -67,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 int[] values = getApplicationContext().getResources().getIntArray(R.array.wait_values);
                 sharedPreferences.edit().putInt("wait_time", values[position]).apply();
                 sharedPreferences.edit().putInt("spinner_position", position).apply();
+                updateDescription();
             }
 
             @Override
@@ -74,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 // *tumbleweeds roll by*
             }
         });
-        MaterialCardView waitCard = findViewById(R.id.timeCard);
-        waitCard.setOnClickListener(new View.OnClickListener() {
+        View timeClicker = findViewById(R.id.timeClicker);
+        timeClicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Spinner timeSpinner = findViewById(R.id.timeSpinner);
@@ -89,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 sharedPreferences.edit().putBoolean("enableNotifications", isChecked).apply();
             }
         });
-        MaterialCardView notifCard = findViewById(R.id.notifCard);
-        notifCard.setOnClickListener(new View.OnClickListener() {
+        View notifClicker = findViewById(R.id.notifClicker);
+        notifClicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
@@ -154,5 +179,50 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void updateDescription() {
+        SwitchCompat onSwitch = findViewById(R.id.onSwitch);
+        TextView switchDesc = findViewById(R.id.switchDesc);
+        Spinner timeSpinner = findViewById(R.id.timeSpinner);
+        if (onSwitch.isChecked()) {
+            switchDesc.setText(getResources().getString(R.string.enabled_desc, timeSpinner.getSelectedItem().toString()));
+        } else {
+            switchDesc.setText(getResources().getString(R.string.disabled_desc));
+        }
+    }
+
+    private void fadeInSettings() {
+        settingsView.setAlpha(0f);
+        settingsView.setVisibility(View.VISIBLE);
+        settingsView.animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration)
+                .setListener(null);
+    }
+
+    private void fadeOutSettings() {
+        settingsView.animate()
+                .alpha(0f)
+                .setDuration(shortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        settingsView.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void changeCardColor(final MaterialCardView cardView, int fromColor, int toColor) {
+        @SuppressLint("RestrictedApi") ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+        colorAnimation.setDuration(shortAnimationDuration);
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                cardView.setCardBackgroundColor((int) animator.getAnimatedValue());
+            }
+        });
+        colorAnimation.start();
     }
 }

@@ -148,22 +148,28 @@ public class InstrumentedTests {
     }
 
     public void userCanClickNotifSwitch() {
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
+        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
         onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo());
         onView(withId(R.id.notifSwitch)).perform(setChecked(true)).check(matches(isChecked()));
     }
 
     @Test
-    public void notifCardWorksAsSwitch() {
-        onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo());
+    public void notifClickerWorksAsSwitch() {
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
+        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
+        onView((withId(R.id.notifSwitch))).perform(scrollTo());
         onView(withId(R.id.notifSwitch)).perform(setChecked(false));
-        onView((withId(R.id.notifCard))).perform(ViewActions.scrollTo());
-        onView(withId(R.id.notifCard)).perform(click());
-        onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo());
+        onView((withId(R.id.notifClicker))).perform(scrollTo());
+        onView(withId(R.id.notifClicker)).perform(click());
+        onView((withId(R.id.notifSwitch))).perform(scrollTo());
         onView(withId(R.id.notifSwitch)).check(matches(isChecked()));
     }
 
     @Test
     public void userCanSelectTimeSpinnerOptions() {
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
+        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
         onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
         for (String selectionText: targetContext.getResources().
                 getStringArray(R.array.wait_entries)) {
@@ -174,12 +180,14 @@ public class InstrumentedTests {
     }
 
     @Test
-    public void timeCardWorksAsSpinner() {
+    public void settingsClickerWorksAsSpinner() {
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
+        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
         onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
         for (String selectionText : targetContext.getResources().
                 getStringArray(R.array.wait_entries)) {
-            onView((withId(R.id.timeCard))).perform(ViewActions.scrollTo());
-            onView(withId(R.id.timeCard)).perform(click());
+            onView((withId(R.id.timeClicker))).perform(ViewActions.scrollTo());
+            onView(withId(R.id.timeClicker)).perform(click());
             onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
             onView((withId(R.id.timeSpinner))).perform(ViewActions.scrollTo());
             onView(withId(R.id.timeSpinner)).check(matches(withSpinnerText(containsString(selectionText))));
@@ -251,8 +259,10 @@ public class InstrumentedTests {
         sharedPreferences.edit().putBoolean("enableNotifications", true).apply();
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
         onView(withId(R.id.onSwitch)).perform(setChecked(testArg));
-        onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.notifSwitch)).perform(setChecked(true));
+        if (testArg) {
+            onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo());
+            onView(withId(R.id.notifSwitch)).perform(setChecked(true));
+        }
         initializeTestWorkManager(targetContext);
         Intent intent = new Intent(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         BluetoothReceiver receiver = new BluetoothReceiver();
