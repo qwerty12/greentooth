@@ -39,7 +39,6 @@ import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
-    private View settingsView;
     private int shortAnimationDuration;
 
     @Override
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         final SharedPreferences sharedPreferences = this.getSharedPreferences(this.getString(
                 R.string.preference_name), 0);
-        settingsView = findViewById(R.id.settingsCard);
         shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         SwitchCompat onSwitch = findViewById(R.id.onSwitch);
         onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
