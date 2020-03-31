@@ -98,7 +98,6 @@
             android:layout_margin="@dimen/mtrl_card_spacing"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone"
             app:cardCornerRadius="20dp"
             app:cardElevation="6dp"
             tools:visibility="visible">

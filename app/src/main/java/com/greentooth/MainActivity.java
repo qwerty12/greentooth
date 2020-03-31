@@ -15,8 +15,6 @@
 */
 package com.greentooth;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
@@ -65,11 +63,9 @@ public class MainActivity extends AppCompatActivity {
                 final int switchCardEnabledColor = getResources().getColor(R.color.primaryColorVariant);
                 if (isChecked) {
                     switchText.setText(R.string.enabled);
-                    fadeInSettings();
                     changeCardColor(switchCard, switchCardDisabledColor, switchCardEnabledColor);
                 } else {
                     switchText.setText(R.string.disabled);
-                    fadeOutSettings();
                     changeCardColor(switchCard, switchCardEnabledColor, switchCardDisabledColor);
                 }
                 updateDescription();
@@ -190,27 +186,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             switchDesc.setText(getResources().getString(R.string.disabled_desc));
         }
-    }
-
-    private void fadeInSettings() {
-        settingsView.setAlpha(0f);
-        settingsView.setVisibility(View.VISIBLE);
-        settingsView.animate()
-                .alpha(1f)
-                .setDuration(shortAnimationDuration)
-                .setListener(null);
-    }
-
-    private void fadeOutSettings() {
-        settingsView.animate()
-                .alpha(0f)
-                .setDuration(shortAnimationDuration)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        settingsView.setVisibility(View.GONE);
-                    }
-                });
     }
 
     private void changeCardColor(final MaterialCardView cardView, int fromColor, int toColor) {
