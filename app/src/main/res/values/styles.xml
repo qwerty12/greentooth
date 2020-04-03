@@ -13,6 +13,7 @@
         <item name="colorOnSecondary">#000000</item>
         <item name="colorPrimaryDark">#005500</item>
         <item name="colorOnPrimarySurface">#FFFFFF</item>
+        <item name="colorSurface">@color/colorSurface</item>
 
 
 

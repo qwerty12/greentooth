@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <color name="colorPrimary">#4FC553</color>
-    <color name="colorPrimaryDark">#2E7D32</color>
-    <color name="colorAccent">#81C784</color>
-    <color name="colorWindowBackground">#FFFFFF</color>-->
     <color name="primaryColor">#32832B</color>
     <color name="colorOnSurface">#000000</color>
     <color name="primaryColorVariant">#1f7745</color>
@@ -11,5 +7,5 @@
     <color name="colorSecondary">#64b358</color>
     <color name="switchDisabled">#646464</color>
     <color name="switchTextColor">#FFFFFF</color>
-
+    <color name="colorSurface">#FFFFFF</color>
 </resources>

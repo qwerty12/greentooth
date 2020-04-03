@@ -34,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
 import com.google.android.material.card.MaterialCardView;
@@ -144,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
         switch (item.getItemId()) {
+            case R.id.action_help:
+                showHelp();
+                return true;
             case R.id.action_about:
                 com.greentooth.AboutFragment about = new AboutFragment();
                 about.show(getSupportFragmentManager(), "com.greentooth.AboutFragment");
@@ -197,5 +201,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         colorAnimation.start();
+    }
+
+    private void showHelp() {
+        BottomSheetHelpDialogFragment bottomSheetHelpDialogFragment = new BottomSheetHelpDialogFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        bottomSheetHelpDialogFragment.show(fragmentManager, "modalSheetDialog");
     }
 }

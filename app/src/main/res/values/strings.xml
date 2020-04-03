@@ -13,6 +13,14 @@
         <item>@string/time_90</item>
         <item>@string/time_120</item>
     </string-array>
+    <string-array name="help_entries">
+        <item>@string/help_1</item>
+        <item>@string/help_2</item>
+        <item>@string/help_3</item>
+    </string-array>
+    <string name="help_1">Bluetooth, while a very useful feature, can cause unnecessary battery drain and represents a security risk if it is turned on at all times.</string>
+    <string name="help_2">Greentooth helps you save battery and mitigate the security risks of Bluetooth by automatically turning Bluetooth off when you\'re no longer using it.</string>
+    <string name="help_3">When the last Bluetooth device has disconnected Greentooth will wait for an adjustable amount of time in order to not disturb any connection/reconnection attempts and then deactivate Bluetooth.</string>
     <string name="channel_id">Green_Channel</string>
     <string name="channel_name">Greentooth Channel</string>
     <string name="channel_description">Greentooth Notification Channel</string>
@@ -34,8 +42,7 @@
     <string name="notif_desc">Send a notification when Greentooth has disabled Bluetooth.</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
-    <string name="enabled_desc">Greentooth is enabled and will turn off Bluetooth when it is no longer in use.
-        When the last Bluetooth device has disconnected Greentooth will wait %1$s in order to not disturb any
-        connection/reconnection attempts and then deactivate Bluetooth.</string>
+    <string name="enabled_desc">Greentooth is enabled and will turn off Bluetooth when it is no longer in use.</string>
     <string name="disabled_desc">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected and a small delay has passed.</string>
+    <string name="help">Help</string>
 </resources>

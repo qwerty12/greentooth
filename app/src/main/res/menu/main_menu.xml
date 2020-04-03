@@ -19,6 +19,10 @@
             </group>
         </menu>
     </item>
+    <item android:id="@+id/action_help"
+        android:title="@string/help"
+        android:icon="@drawable/help_icon"
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/action_about"
         android:title="@string/about_menu_title"
         app:showAsAction="never" />
