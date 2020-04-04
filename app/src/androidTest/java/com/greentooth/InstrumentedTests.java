@@ -2,13 +2,11 @@ package com.greentooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -77,7 +75,7 @@ public class InstrumentedTests {
 
     @Rule
     public ActivityTestRule<MainActivity> activityActivityTestRule =
-            new ActivityTestRule<MainActivity>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void initPrefs() {
@@ -122,8 +120,6 @@ public class InstrumentedTests {
         // Context of the app under test.
         assertEquals("com.greentooth", targetContext.getPackageName());
     }
-
-
 
     @Test
     public void userCanClickOnSwitch() {
@@ -253,8 +249,7 @@ public class InstrumentedTests {
         if (!hasBluetooth() || isEmulator()) {
             return null;
         }
-        BluetoothManager bluetoothManager = (BluetoothManager) targetContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         enableBluetooth(bluetoothAdapter);
         //Run without delay for tests
         sharedPreferences.edit().putInt(DELAY_KEY, 0).apply();
@@ -271,12 +266,7 @@ public class InstrumentedTests {
     }
 
     public boolean hasBluetooth() {
-        try {
-            BluetoothManager bluetoothManager = (BluetoothManager) targetContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        } catch (NoClassDefFoundError e) {
-            return false;
-        }
-        return targetContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
+        return BluetoothAdapter.getDefaultAdapter() != null;
     }
 
     @SdkSuppress(minSdkVersion = 18)
