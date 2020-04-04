@@ -28,6 +28,10 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import static com.greentooth.GreenApplication.APP_KEY;
+import static com.greentooth.GreenApplication.CHANNEL_ID;
+import static com.greentooth.GreenApplication.LAST_NOTIFICATION_ID_KEY;
+
 class Util {
 
     private static final int[] profiles = getBuildProfiles();
@@ -62,7 +66,7 @@ class Util {
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 0, intent, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
-                context.getString(R.string.channel_id))
+                CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(title)
                 .setContentText(body)
@@ -94,13 +98,12 @@ class Util {
     }
 
     private static int getNextNotificationId(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(
-                R.string.preference_name),0);
-        int id = sharedPreferences.getInt("lastNotificationId", 0) + 1;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(APP_KEY,0);
+        int id = sharedPreferences.getInt(LAST_NOTIFICATION_ID_KEY, 0) + 1;
         if (id == Integer.MAX_VALUE) {
             id = 0;
         }
-        sharedPreferences.edit().putInt("lastNotificationId", id).apply();
+        sharedPreferences.edit().putInt(LAST_NOTIFICATION_ID_KEY, id).apply();
         return id;
     }
 

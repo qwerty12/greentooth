@@ -13,10 +13,8 @@
         <item>@string/time_90</item>
         <item>@string/time_120</item>
     </string-array>
-    <string name="channel_id">Green_Channel</string>
     <string name="channel_name">Greentooth Channel</string>
     <string name="channel_description">Greentooth Notification Channel</string>
-    <string name="preference_name">Greentooth</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\nMaterial Design Icon by Google\nSPDX-License-Identifier: Apache-2.0</string>
@@ -32,4 +30,6 @@
     <string name="wait_desc">The minimum delay before Bluetooth is turned off. Please note that this is just a minimum delay and it may take a bit longer due to how Android works.</string>
     <string name="notifications">Notifications</string>
     <string name="notif_desc">Send a notification when Greentooth has disabled Bluetooth.</string>
+    <string name="notification_title">Bluetooth disabled</string>
+    <string name="notification_body">No devices connected.</string>
 </resources>

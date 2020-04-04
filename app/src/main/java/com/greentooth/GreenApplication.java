@@ -26,13 +26,21 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 
 public class GreenApplication extends Application {
+    public static final String APP_KEY = "Greentooth";
+    public static final String ENABLED_KEY = "greentoothEnabled";
+    public static final String DELAY_KEY = "waitTime";
+    public static final String NOTIFICATIONS_KEY = "notificationsEnabled";
+    public static final String TIME_SPINNER_POSITION_KEY = "timeSpinnerPosition";
+    public static final String THEME_KEY = "theme";
+    public static final String CHANNEL_ID = "greentoothChannel";
+    public static final String LAST_NOTIFICATION_ID_KEY = "lastNotificationId";
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
-        int themeItemId = sharedPreferences.getInt("theme", R.id.action_default_theme);
+        SharedPreferences sharedPreferences = getSharedPreferences(APP_KEY, 0);
+        int themeItemId = sharedPreferences.getInt(THEME_KEY, R.id.action_default_theme);
         switch (themeItemId) {
             case R.id.action_default_theme:
                 if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || Build.MODEL.equals("SM-G950F")) {
@@ -56,7 +64,7 @@ public class GreenApplication extends Application {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            String channel_id = getString(R.string.channel_id);
+            String channel_id = CHANNEL_ID;
             NotificationChannel channel = new NotificationChannel(channel_id, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance

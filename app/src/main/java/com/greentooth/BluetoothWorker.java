@@ -24,6 +24,9 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import static com.greentooth.GreenApplication.APP_KEY;
+import static com.greentooth.GreenApplication.ENABLED_KEY;
+import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
 import static com.greentooth.Util.isEnabled;
 import static com.greentooth.Util.notConnected;
 
@@ -41,16 +44,16 @@ public class BluetoothWorker extends Worker {
     Result doWork() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Context context = getApplicationContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_name), 0);
-        boolean switchedOn = sharedPreferences.getBoolean("isEnabled", false);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(APP_KEY, 0);
+        boolean switchedOn = sharedPreferences.getBoolean(ENABLED_KEY, false);
         if (isEnabled(bluetoothAdapter) && notConnected(bluetoothAdapter) && !bluetoothAdapter.isDiscovering()
                 && switchedOn) {
             boolean disabled = bluetoothAdapter.disable();
             if (disabled) {
-                boolean enableNotif = sharedPreferences.getBoolean("enableNotifications", false);
+                boolean enableNotif = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
                 if (enableNotif) {
-                    Util.SendNotification(context, "Bluetooth disabled",
-                            "No devices connected.");
+                    Util.SendNotification(context, context.getString(R.string.notification_title),
+                            context.getString(R.string.notification_body));
                 }
                 return Result.success();
             } else {

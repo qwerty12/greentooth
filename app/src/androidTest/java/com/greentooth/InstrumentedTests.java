@@ -48,6 +48,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.work.testing.WorkManagerTestInitHelper.initializeTestWorkManager;
+import static com.greentooth.GreenApplication.APP_KEY;
+import static com.greentooth.GreenApplication.DELAY_KEY;
+import static com.greentooth.GreenApplication.ENABLED_KEY;
+import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
 import static com.greentooth.Util.SendNotification;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -78,8 +82,7 @@ public class InstrumentedTests {
     @Before
     public void initPrefs() {
         targetContext = getInstrumentation().getTargetContext();
-        String prefName = targetContext.getResources().getString(R.string.preference_name);
-        sharedPreferences = targetContext.getSharedPreferences(prefName, 0);
+        sharedPreferences = targetContext.getSharedPreferences(APP_KEY, 0);
         sharedPreferences.edit().clear().apply();
     }
 
@@ -127,10 +130,10 @@ public class InstrumentedTests {
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo())
                                      .perform(setChecked(true))
                                      .check(matches(isChecked()));
-        boolean isEnabled = sharedPreferences.getBoolean("isEnabled", false);
+        boolean isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
         assertTrue(isEnabled);
         onView(withId(R.id.onSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
-        isEnabled = sharedPreferences.getBoolean("isEnabled", true);
+        isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, true);
         assertFalse(isEnabled);
     }
 
@@ -139,11 +142,11 @@ public class InstrumentedTests {
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(false));
         onView(withId(R.id.switchCard)).perform(ViewActions.scrollTo()).perform(click());
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).check(matches(isChecked()));
-        boolean isEnabled = sharedPreferences.getBoolean("isEnabled", false);
+        boolean isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
         assertTrue(isEnabled);
         onView(withId(R.id.switchCard)).perform(ViewActions.scrollTo()).perform(click());
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
-        isEnabled = sharedPreferences.getBoolean("isEnabled", true);
+        isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, true);
         assertFalse(isEnabled);
     }
 
@@ -151,10 +154,10 @@ public class InstrumentedTests {
         onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo())
                                         .perform(setChecked(true))
                                         .check(matches(isChecked()));
-        boolean notifEnabled = sharedPreferences.getBoolean("enableNotifications", false);
+        boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
         assertTrue(notifEnabled);
         onView(withId(R.id.notifSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
-        notifEnabled = sharedPreferences.getBoolean("enableNotifications", true);
+        notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
         assertFalse(notifEnabled);
     }
 
@@ -163,11 +166,11 @@ public class InstrumentedTests {
         onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo()).perform(setChecked(false));
         onView((withId(R.id.notifCard))).perform(ViewActions.scrollTo()).perform(click());
         onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo()).check(matches(isChecked()));
-        boolean notifEnabled = sharedPreferences.getBoolean("enableNotifications", false);
+        boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
         assertTrue(notifEnabled);
         onView((withId(R.id.notifCard))).perform(ViewActions.scrollTo()).perform(click());
         onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
-        notifEnabled = sharedPreferences.getBoolean("enableNotifications", true);
+        notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
         assertFalse(notifEnabled);
     }
 
@@ -254,10 +257,10 @@ public class InstrumentedTests {
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
         enableBluetooth(bluetoothAdapter);
         //Run without delay for tests
-        sharedPreferences.edit().putInt("wait_time", 0).apply();
+        sharedPreferences.edit().putInt(DELAY_KEY, 0).apply();
         //Setting the switch doesn't seem to be enough, maybe due to threading shenanigans so notifications
         //are enabled manually
-        sharedPreferences.edit().putBoolean("enableNotifications", true).apply();
+        sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, true).apply();
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(testArg));
         onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(true));
         initializeTestWorkManager(targetContext);
