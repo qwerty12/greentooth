@@ -43,7 +43,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_name), 0);
             boolean switchedOn = sharedPreferences.getBoolean("isEnabled", false);
-            if (isEnabled(bluetoothAdapter) && notConnected(bluetoothAdapter) && switchedOn) {
+            if (isEnabled(bluetoothAdapter) && notConnected(bluetoothAdapter) && !bluetoothAdapter.isDiscovering()
+                    && switchedOn) {
                 long waitTime = sharedPreferences.getInt("wait_time", 20);
                 OneTimeWorkRequest bluetoothWorkRequest = new OneTimeWorkRequest.Builder(
                         BluetoothWorker.class).setInitialDelay(waitTime, TimeUnit.SECONDS).
