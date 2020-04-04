@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,6 +34,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.android.material.card.MaterialCardView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +57,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Spinner timeSpinner = findViewById(R.id.timeSpinner);
+        List<String> wait_entries = new ArrayList<String>(Arrays.asList(
+                getResources().getStringArray(R.array.wait_entries)));
+        if (BuildConfig.DEBUG) {
+            wait_entries.add(0, "None");
+        }
+        ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, wait_entries);
+        timeAdapter.setDropDownViewResource(com.google.android.material.R.layout.support_simple_spinner_dropdown_item);
+
+        timeSpinner.setAdapter(timeAdapter);
 
         MaterialCardView switchCard = findViewById(R.id.switchCard);
         switchCard.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int[] values = getApplicationContext().getResources().getIntArray(R.array.wait_values);
+                if (BuildConfig.DEBUG) {
+                    //copyOf automatically adds the zero we need to the first element
+                    int[] newArray = Arrays.copyOf(values, values.length + 1);
+                    System.arraycopy(values, 0, newArray, 1, values.length);
+                    values = newArray;
+                }
                 sharedPreferences.edit().putInt("wait_time", values[position]).apply();
                 sharedPreferences.edit().putInt("spinner_position", position).apply();
             }
