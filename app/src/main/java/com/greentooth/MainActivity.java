@@ -24,9 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,7 +45,11 @@ import static com.greentooth.GreenApplication.THEME_KEY;
 import static com.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
 
 public class MainActivity extends AppCompatActivity {
+    SharedPreferences sharedPreferences;
     int[] timeSpinnerValues;
+    SwitchCompat onSwitch;
+    SwitchCompat notifSwitch;
+    Spinner timeSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
         if (BuildConfig.DEBUG) {
             int[] temp = getResources().getIntArray(R.array.wait_values);
             timeSpinnerValues = new int[temp.length+1];
@@ -63,15 +66,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             timeSpinnerValues = getResources().getIntArray(R.array.wait_values);
         }
-        final SharedPreferences sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
-        SwitchCompat onSwitch = findViewById(R.id.onSwitch);
-        onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean(ENABLED_KEY, isChecked).apply();
-            }
-        });
-        Spinner timeSpinner = findViewById(R.id.timeSpinner);
+
+        onSwitch = findViewById(R.id.onSwitch);
+        onSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                sharedPreferences.edit().putBoolean(ENABLED_KEY, isChecked).apply());
+        timeSpinner = findViewById(R.id.timeSpinner);
         List<String> wait_entries = new ArrayList<String>(Arrays.asList(
                 getResources().getStringArray(R.array.wait_entries)));
         if (BuildConfig.DEBUG) {
@@ -84,13 +83,7 @@ public class MainActivity extends AppCompatActivity {
         timeSpinner.setAdapter(timeAdapter);
 
         MaterialCardView switchCard = findViewById(R.id.switchCard);
-        switchCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SwitchCompat onSwitch = findViewById(R.id.onSwitch);
-                onSwitch.setChecked(!onSwitch.isChecked());
-            }
-        });
+        switchCard.setOnClickListener(v -> onSwitch.setChecked(!onSwitch.isChecked()));
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -104,37 +97,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         MaterialCardView waitCard = findViewById(R.id.timeCard);
-        waitCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Spinner timeSpinner = findViewById(R.id.timeSpinner);
-                timeSpinner.performClick();
-            }
-        });
-        SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
-        notifSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, isChecked).apply();
-            }
-        });
+        waitCard.setOnClickListener(v -> timeSpinner.performClick());
+        notifSwitch = findViewById(R.id.notifSwitch);
+        notifSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, isChecked).apply());
         MaterialCardView notifCard = findViewById(R.id.notifCard);
-        notifCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
-                notifSwitch.setChecked(!notifSwitch.isChecked());
-            }
-        });
+        notifCard.setOnClickListener(v -> notifSwitch.setChecked(!notifSwitch.isChecked()));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = getSharedPreferences(APP_KEY, 0);
-        Spinner timeSpinner = findViewById(R.id.timeSpinner);
-        SwitchCompat onSwitch = findViewById(R.id.onSwitch);
-        SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
         timeSpinner.setSelection(sharedPreferences.getInt(TIME_SPINNER_POSITION_KEY, 0));
         onSwitch.setChecked(sharedPreferences.getBoolean(ENABLED_KEY, false));
         notifSwitch.setChecked(sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false));
@@ -144,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        SharedPreferences sharedPreferences = getSharedPreferences(APP_KEY, 0);
         int themeItemId = sharedPreferences.getInt(THEME_KEY, R.id.action_default_theme);
         menu.findItem(themeItemId).setChecked(true);
         return true;
@@ -152,28 +124,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        SharedPreferences sharedPreferences = getSharedPreferences(APP_KEY, 0);
+        if (item.getGroupId() == R.id.theme_group) {
+            item.setChecked(true);
+            sharedPreferences.edit().putInt(THEME_KEY, item.getItemId()).apply();
+        }
         switch (item.getItemId()) {
             case R.id.action_about:
                 com.greentooth.AboutFragment about = new AboutFragment();
                 about.show(getSupportFragmentManager(), "com.greentooth.AboutFragment");
                 return true;
             case R.id.action_dark_theme:
-                item.setChecked(true);
-                sharedPreferences.edit().putInt(THEME_KEY, item.getItemId()).apply();
-                Toast.makeText(this, "Dark theme selected", Toast.LENGTH_SHORT).show();
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 return true;
             case R.id.action_light_theme:
-                item.setChecked(true);
-                sharedPreferences.edit().putInt(THEME_KEY, item.getItemId()).apply();
-                Toast.makeText(this, "Light theme selected", Toast.LENGTH_SHORT).show();
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 return true;
             case R.id.action_default_theme:
-                item.setChecked(true);
-                sharedPreferences.edit().putInt(THEME_KEY, item.getItemId()).apply();
-                Toast.makeText(this, "Default theme selected", Toast.LENGTH_SHORT).show();
                 if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P) || Build.MODEL.equals("SM-G950F")) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
