@@ -47,6 +47,7 @@ import static com.greentooth.GreenApplication.THEME_KEY;
 import static com.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
 
 public class MainActivity extends AppCompatActivity {
+    int[] timeSpinnerValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        if (BuildConfig.DEBUG) {
+            int[] temp = getResources().getIntArray(R.array.wait_values);
+            timeSpinnerValues = new int[temp.length+1];
+            System.arraycopy(temp, 0, timeSpinnerValues, 1, temp.length);
+            timeSpinnerValues[0] = 0;
+        } else {
+            timeSpinnerValues = getResources().getIntArray(R.array.wait_values);
+        }
         final SharedPreferences sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
         SwitchCompat onSwitch = findViewById(R.id.onSwitch);
         onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -85,14 +94,7 @@ public class MainActivity extends AppCompatActivity {
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int[] values = getApplicationContext().getResources().getIntArray(R.array.wait_values);
-                if (BuildConfig.DEBUG) {
-                    //copyOf automatically adds the zero we need to the first element
-                    int[] newArray = Arrays.copyOf(values, values.length + 1);
-                    System.arraycopy(values, 0, newArray, 1, values.length);
-                    values = newArray;
-                }
-                sharedPreferences.edit().putInt(DELAY_KEY, values[position]).apply();
+                sharedPreferences.edit().putInt(DELAY_KEY, timeSpinnerValues[position]).apply();
                 sharedPreferences.edit().putInt(TIME_SPINNER_POSITION_KEY, position).apply();
             }
 
