@@ -23,7 +23,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -33,10 +32,6 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.android.material.card.MaterialCardView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static com.greentooth.GreenApplication.APP_KEY;
 import static com.greentooth.GreenApplication.DELAY_KEY;
 import static com.greentooth.GreenApplication.ENABLED_KEY;
@@ -45,11 +40,10 @@ import static com.greentooth.GreenApplication.THEME_KEY;
 import static com.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
 
 public class MainActivity extends AppCompatActivity {
-    SharedPreferences sharedPreferences;
-    int[] timeSpinnerValues;
-    SwitchCompat onSwitch;
-    SwitchCompat notifSwitch;
-    Spinner timeSpinner;
+    private SharedPreferences sharedPreferences;
+    private SwitchCompat onSwitch;
+    private Spinner timeSpinner;
+    private SwitchCompat notificationsSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,33 +51,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
-        if (BuildConfig.DEBUG) {
-            int[] temp = getResources().getIntArray(R.array.wait_values);
-            timeSpinnerValues = new int[temp.length+1];
-            System.arraycopy(temp, 0, timeSpinnerValues, 1, temp.length);
-            timeSpinnerValues[0] = 0;
-        } else {
-            timeSpinnerValues = getResources().getIntArray(R.array.wait_values);
-        }
 
+        //Set instance variables
+        sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
         onSwitch = findViewById(R.id.onSwitch);
+        timeSpinner = findViewById(R.id.timeSpinner);
+        notificationsSwitch = findViewById(R.id.notificationsSwitch);
+
+        //Set listeners for controls
         onSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
                 sharedPreferences.edit().putBoolean(ENABLED_KEY, isChecked).apply());
-        timeSpinner = findViewById(R.id.timeSpinner);
-        List<String> wait_entries = new ArrayList<String>(Arrays.asList(
-                getResources().getStringArray(R.array.wait_entries)));
-        if (BuildConfig.DEBUG) {
-            wait_entries.add(0, "None");
-        }
-        ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, wait_entries);
-        timeAdapter.setDropDownViewResource(com.google.android.material.R.layout.support_simple_spinner_dropdown_item);
-
-        timeSpinner.setAdapter(timeAdapter);
-
-        MaterialCardView switchCard = findViewById(R.id.switchCard);
-        switchCard.setOnClickListener(v -> onSwitch.setChecked(!onSwitch.isChecked()));
+        int[] timeSpinnerValues = getResources().getIntArray(R.array.wait_values);
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -92,17 +70,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // *tumbleweeds roll by*
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
-        MaterialCardView waitCard = findViewById(R.id.timeCard);
-        waitCard.setOnClickListener(v -> timeSpinner.performClick());
-        notifSwitch = findViewById(R.id.notifSwitch);
-        notifSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
                 sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, isChecked).apply());
-        MaterialCardView notifCard = findViewById(R.id.notifCard);
-        notifCard.setOnClickListener(v -> notifSwitch.setChecked(!notifSwitch.isChecked()));
+
+        //Declare and set parent card views
+        MaterialCardView switchCard = findViewById(R.id.switchCard);
+        MaterialCardView waitCard = findViewById(R.id.timeCard);
+        MaterialCardView notificationsCard = findViewById(R.id.notifications_card);
+
+        //Set parent listeners to pass clicks to children
+        switchCard.setOnClickListener(v -> onSwitch.setChecked(!onSwitch.isChecked()));
+        waitCard.setOnClickListener(v -> timeSpinner.performClick());
+        notificationsCard.setOnClickListener(v -> notificationsSwitch.setChecked(!notificationsSwitch.isChecked()));
     }
 
     @Override
@@ -110,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         timeSpinner.setSelection(sharedPreferences.getInt(TIME_SPINNER_POSITION_KEY, 0));
         onSwitch.setChecked(sharedPreferences.getBoolean(ENABLED_KEY, false));
-        notifSwitch.setChecked(sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false));
+        notificationsSwitch.setChecked(sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false));
     }
 
     @Override

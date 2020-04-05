@@ -129,7 +129,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/notifCard"
+                android:id="@+id/notifications_card"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"
@@ -162,7 +162,7 @@
                         android:text="@string/notif_desc" />
 
                     <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/notifSwitch"
+                        android:id="@+id/notificationsSwitch"
                         android:duplicateParentState="true"
                         android:focusable="false"
                         android:layout_width="wrap_content"

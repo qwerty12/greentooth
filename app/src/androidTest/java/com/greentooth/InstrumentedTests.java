@@ -147,25 +147,25 @@ public class InstrumentedTests {
     }
 
     public void userCanClickNotifSwitch() {
-        onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo())
+        onView(withId(R.id.notificationsSwitch)).perform(ViewActions.scrollTo())
                                         .perform(setChecked(true))
                                         .check(matches(isChecked()));
         boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
         assertTrue(notifEnabled);
-        onView(withId(R.id.notifSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
+        onView(withId(R.id.notificationsSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
         notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
         assertFalse(notifEnabled);
     }
 
     @Test
     public void notifCardWorksAsSwitch() {
-        onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo()).perform(setChecked(false));
-        onView((withId(R.id.notifCard))).perform(ViewActions.scrollTo()).perform(click());
-        onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo()).check(matches(isChecked()));
+        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).perform(setChecked(false));
+        onView((withId(R.id.notifications_card))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).check(matches(isChecked()));
         boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
         assertTrue(notifEnabled);
-        onView((withId(R.id.notifCard))).perform(ViewActions.scrollTo()).perform(click());
-        onView((withId(R.id.notifSwitch))).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
+        onView((withId(R.id.notifications_card))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
         notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
         assertFalse(notifEnabled);
     }
@@ -257,7 +257,7 @@ public class InstrumentedTests {
         //are enabled manually
         sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, true).apply();
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(testArg));
-        onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(true));
+        onView(withId(R.id.notificationsSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(true));
         initializeTestWorkManager(targetContext);
         Intent intent = new Intent(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         BluetoothReceiver receiver = new BluetoothReceiver();
