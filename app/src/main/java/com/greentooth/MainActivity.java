@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void updateDescription() {
+    private void updateDescription() {
         TextView switchDesc = findViewById(R.id.switchDesc);
         if (onSwitch.isChecked()) {
             switchDesc.setText(getResources().getString(R.string.enabled_desc));
