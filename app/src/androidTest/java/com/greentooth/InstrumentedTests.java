@@ -222,7 +222,8 @@ public class InstrumentedTests {
         openThemesMenu();
         onView(withText(R.string.default_theme)).perform(click());
         mode = AppCompatDelegate.getDefaultNightMode();
-        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || Build.MODEL.equals("SM-G950F")) {
+        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || (Build.VERSION.SDK_INT == Build.VERSION_CODES.P
+                && Build.MANUFACTURER.equalsIgnoreCase("samsung"))) {
             assertEquals(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, mode);
         } else {
             assertEquals(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, mode);
@@ -277,9 +278,10 @@ public class InstrumentedTests {
             assertFalse(bluetoothAdapter.isEnabled());
             UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
             mDevice.openNotification();
-            mDevice.wait(Until.hasObject(By.textStartsWith("Greentooth")), TIMEOUT);
-            UiObject2 notification = mDevice.findObject(By.textStartsWith("Bluetooth disabled"));
-            assertEquals(notification.getText(), "Bluetooth disabled");
+            mDevice.wait(Until.hasObject(By.textStartsWith(targetContext.getString(R.string.app_name))), TIMEOUT);
+            UiObject2 notification = mDevice.findObject(By.textStartsWith(
+                    targetContext.getString(R.string.notification_title)));
+            assertEquals(notification.getText(), targetContext.getString(R.string.notification_body));
             notification.click();
         }
     }
