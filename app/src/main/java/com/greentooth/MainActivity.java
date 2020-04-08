@@ -25,7 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,9 +34,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,34 +52,25 @@ public class MainActivity extends AppCompatActivity {
                 R.string.preference_name), 0);
         shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         SwitchCompat onSwitch = findViewById(R.id.onSwitch);
-        onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean("isEnabled", isChecked).apply();
-                TextView switchText = findViewById(R.id.switchTitle);
-                MaterialCardView switchCard = findViewById(R.id.switchCard);
-                final int switchCardDisabledColor = getResources().getColor(R.color.switchDisabled);
-                final int switchCardEnabledColor = getResources().getColor(R.color.primaryColorVariant);
-                if (isChecked) {
-                    switchText.setText(R.string.enabled);
-                    changeCardColor(switchCard, switchCardDisabledColor, switchCardEnabledColor);
-                } else {
-                    switchText.setText(R.string.disabled);
-                    changeCardColor(switchCard, switchCardEnabledColor, switchCardDisabledColor);
-                }
-                updateDescription();
+        onSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean("isEnabled", isChecked).apply();
+            TextView switchText = findViewById(R.id.switchTitle);
+            MaterialCardView switchCard = findViewById(R.id.switchCard);
+            final int switchCardDisabledColor = getResources().getColor(R.color.switchDisabled);
+            final int switchCardEnabledColor = getResources().getColor(R.color.primaryColorVariant);
+            if (isChecked) {
+                switchText.setText(R.string.enabled);
+                changeCardColor(switchCard, switchCardDisabledColor, switchCardEnabledColor);
+            } else {
+                switchText.setText(R.string.disabled);
+                changeCardColor(switchCard, switchCardEnabledColor, switchCardDisabledColor);
             }
+            updateDescription();
         });
         Spinner timeSpinner = findViewById(R.id.timeSpinner);
 
         MaterialCardView switchCard = findViewById(R.id.switchCard);
-        switchCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SwitchCompat onSwitch = findViewById(R.id.onSwitch);
-                onSwitch.setChecked(!onSwitch.isChecked());
-            }
-        });
+        switchCard.setOnClickListener(v -> onSwitch.setChecked(!onSwitch.isChecked()));
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -95,28 +86,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         View timeClicker = findViewById(R.id.timeClicker);
-        timeClicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Spinner timeSpinner = findViewById(R.id.timeSpinner);
-                timeSpinner.performClick();
-            }
-        });
+        timeClicker.setOnClickListener(v -> timeSpinner.performClick());
         SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
-        notifSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean("enableNotifications", isChecked).apply();
-            }
-        });
+        notifSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean(
+                "enableNotifications", isChecked).apply());
         View notifClicker = findViewById(R.id.notifClicker);
-        notifClicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
-                notifSwitch.setChecked(!notifSwitch.isChecked());
-            }
-        });
+        notifClicker.setOnClickListener(v -> notifSwitch.setChecked(!notifSwitch.isChecked()));
     }
 
     @Override
@@ -182,9 +157,8 @@ public class MainActivity extends AppCompatActivity {
     public void updateDescription() {
         SwitchCompat onSwitch = findViewById(R.id.onSwitch);
         TextView switchDesc = findViewById(R.id.switchDesc);
-        Spinner timeSpinner = findViewById(R.id.timeSpinner);
         if (onSwitch.isChecked()) {
-            switchDesc.setText(getResources().getString(R.string.enabled_desc, timeSpinner.getSelectedItem().toString()));
+            switchDesc.setText(getResources().getString(R.string.enabled_desc));
         } else {
             switchDesc.setText(getResources().getString(R.string.disabled_desc));
         }
@@ -193,19 +167,19 @@ public class MainActivity extends AppCompatActivity {
     private void changeCardColor(final MaterialCardView cardView, int fromColor, int toColor) {
         @SuppressLint("RestrictedApi") ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
         colorAnimation.setDuration(shortAnimationDuration);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                cardView.setCardBackgroundColor((int) animator.getAnimatedValue());
-            }
-        });
+        colorAnimation.addUpdateListener(animator -> cardView.setCardBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();
     }
 
     private void showHelp() {
-        BottomSheetHelpDialogFragment bottomSheetHelpDialogFragment = new BottomSheetHelpDialogFragment();
+        View view = getLayoutInflater().inflate(R.layout.help_sheet, null);
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(view);
+        Button helpButton = dialog.findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+        /*BottomSheetHelpDialogFragment bottomSheetHelpDialogFragment = new BottomSheetHelpDialogFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        bottomSheetHelpDialogFragment.show(fragmentManager, "modalSheetDialog");
+        bottomSheetHelpDialogFragment.show(fragmentManager, "modalSheetDialog");*/
     }
 }
