@@ -27,8 +27,8 @@ import androidx.work.WorkerParameters;
 import static com.greentooth.GreenApplication.APP_KEY;
 import static com.greentooth.GreenApplication.ENABLED_KEY;
 import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
-import static com.greentooth.Util.isEnabled;
-import static com.greentooth.Util.notConnected;
+import static com.greentooth.Util.isBluetoothConnected;
+import static com.greentooth.Util.isBluetoothEnabled;
 
 public class BluetoothWorker extends Worker {
 
@@ -38,21 +38,20 @@ public class BluetoothWorker extends Worker {
         super(context, params);
     }
 
-
     @Override
     public @NonNull
     Result doWork() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(APP_KEY, 0);
-        boolean switchedOn = sharedPreferences.getBoolean(ENABLED_KEY, false);
-        if (isEnabled(bluetoothAdapter) && notConnected(bluetoothAdapter) && !bluetoothAdapter.isDiscovering()
-                && switchedOn) {
+        boolean greentoothEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
+        if (isBluetoothEnabled(bluetoothAdapter) && !isBluetoothConnected(bluetoothAdapter)
+                && !bluetoothAdapter.isDiscovering() && greentoothEnabled) {
             boolean disabled = bluetoothAdapter.disable();
             if (disabled) {
-                boolean enableNotif = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
-                if (enableNotif) {
-                    Util.SendNotification(context, context.getString(R.string.notification_title),
+                boolean notificationsEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
+                if (notificationsEnabled) {
+                    Util.sendNotification(context, context.getString(R.string.notification_title),
                             context.getString(R.string.notification_body));
                 }
                 return Result.success();

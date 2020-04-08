@@ -121,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 return true;
             case R.id.action_default_theme:
-                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P) || Build.MODEL.equals("SM-G950F")) {
+                //Samsung phones have night mode in Android Pie
+                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.P
+                && Build.MANUFACTURER.equalsIgnoreCase("samsung"))) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);

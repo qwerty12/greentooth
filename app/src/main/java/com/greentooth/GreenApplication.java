@@ -43,7 +43,9 @@ public class GreenApplication extends Application {
         int themeItemId = sharedPreferences.getInt(THEME_KEY, R.id.action_default_theme);
         switch (themeItemId) {
             case R.id.action_default_theme:
-                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || Build.MODEL.equals("SM-G950F")) {
+                //Samsung phones have night mode in Android Pie
+                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.P
+                    && Build.MANUFACTURER.equalsIgnoreCase("samsung"))) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
@@ -64,8 +66,7 @@ public class GreenApplication extends Application {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            String channel_id = CHANNEL_ID;
-            NotificationChannel channel = new NotificationChannel(channel_id, name, importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this

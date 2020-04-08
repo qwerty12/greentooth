@@ -16,6 +16,7 @@
 
 package com.greentooth;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
@@ -34,23 +35,40 @@ import static com.greentooth.GreenApplication.LAST_NOTIFICATION_ID_KEY;
 
 class Util {
 
-    private static final int[] profiles = getBuildProfiles();
+    private static int[] bluetoothProfiles;
 
-    private static int[] getBuildProfiles() {
+    public static void setBluetoothProfiles(int[] bluetoothProfiles) {
+        Util.bluetoothProfiles = bluetoothProfiles;
+    }
+
+    public static void setBluetoothProfiles(int sdkInt) {
+        Util.bluetoothProfiles = getBuildBluetoothProfiles(sdkInt);
+    }
+
+    public static int[] getBluetoothProfiles() {
+        if (Util.bluetoothProfiles == null) {
+            Util.bluetoothProfiles = getBuildBluetoothProfiles(Build.VERSION.SDK_INT);
+        }
+        return Util.bluetoothProfiles;
+    }
+
+    @SuppressLint("InlinedApi")
+    @SuppressWarnings("deprecation")
+    private static int[] getBuildBluetoothProfiles(int sdkInt) {
         int[] profiles;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (sdkInt >= 29) {
             profiles = new int[] {BluetoothProfile.HEADSET, BluetoothProfile.A2DP,
                     BluetoothProfile.GATT, BluetoothProfile.GATT_SERVER, BluetoothProfile.SAP,
                     BluetoothProfile.HID_DEVICE, BluetoothProfile.HEARING_AID};
-        } else if (Build.VERSION.SDK_INT >= 28) {
+        } else if (sdkInt >= 28) {
             profiles = new int[] {BluetoothProfile.HEADSET, BluetoothProfile.A2DP,
                     BluetoothProfile.HEALTH, BluetoothProfile.GATT, BluetoothProfile.GATT_SERVER,
                     BluetoothProfile.SAP, BluetoothProfile.HID_DEVICE};
-        } else if (Build.VERSION.SDK_INT >= 23) {
+        } else if (sdkInt >= 23) {
             profiles = new int[] {BluetoothProfile.HEADSET, BluetoothProfile.A2DP,
                     BluetoothProfile.HEALTH, BluetoothProfile.GATT, BluetoothProfile.GATT_SERVER,
                     BluetoothProfile.SAP};
-        } else if (Build.VERSION.SDK_INT >= 18) {
+        } else if (sdkInt >= 18) {
             profiles = new int[] {BluetoothProfile.HEADSET, BluetoothProfile.A2DP,
                     BluetoothProfile.HEALTH, BluetoothProfile.GATT, BluetoothProfile.GATT_SERVER};
         } else {
@@ -60,7 +78,23 @@ class Util {
         return profiles;
     }
 
-    static void SendNotification(Context context, String title, String body) {
+    static boolean isBluetoothEnabled(BluetoothAdapter bluetoothAdapter) {
+        int state = bluetoothAdapter.getState();
+        return state != BluetoothAdapter.STATE_OFF && state != BluetoothAdapter.STATE_TURNING_OFF;
+    }
+
+    static boolean isBluetoothConnected(BluetoothAdapter bluetoothAdapter) {
+        int state;
+        for (int profile : getBluetoothProfiles()) {
+            state = bluetoothAdapter.getProfileConnectionState(profile);
+            if (state == BluetoothProfile.STATE_CONNECTED || state == BluetoothProfile.STATE_CONNECTING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void sendNotification(Context context, String title, String body) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
@@ -79,22 +113,6 @@ class Util {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         int notificationId = getNextNotificationId(context);
         notificationManager.notify(notificationId, builder.build());
-    }
-
-    static boolean isEnabled(BluetoothAdapter bluetoothAdapter) {
-        int state = bluetoothAdapter.getState();
-        return state != BluetoothAdapter.STATE_OFF && state != BluetoothAdapter.STATE_TURNING_OFF;
-    }
-
-    static boolean notConnected(BluetoothAdapter bluetoothAdapter) {
-        int state;
-        for (int profile : profiles) {
-            state = bluetoothAdapter.getProfileConnectionState(profile);
-            if (state == BluetoothProfile.STATE_CONNECTED || state == BluetoothProfile.STATE_CONNECTING) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private static int getNextNotificationId(Context context) {

@@ -17,7 +17,6 @@
 package com.greentooth;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -50,11 +49,7 @@ public class AboutFragment extends DialogFragment {
                 .setCancelable(false)
                 .setTitle("About")
                 .setIcon(R.drawable.ic_launcher)
-                .setPositiveButton(R.string.about_button_positive, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogInterface, int id) {
-                        dialogInterface.dismiss();
-                    }
-                });
+                .setPositiveButton(R.string.about_button_positive, (dialogInterface, id) -> dialogInterface.dismiss());
         return builder.create();
     }
 }

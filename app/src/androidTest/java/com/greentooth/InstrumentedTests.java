@@ -50,7 +50,7 @@ import static com.greentooth.GreenApplication.APP_KEY;
 import static com.greentooth.GreenApplication.DELAY_KEY;
 import static com.greentooth.GreenApplication.ENABLED_KEY;
 import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
-import static com.greentooth.Util.SendNotification;
+import static com.greentooth.Util.sendNotification;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -234,7 +234,7 @@ public class InstrumentedTests {
     public void testNotifications() {
         final String testTitle = "My Title";
         final String testText = "My Text";
-        SendNotification(targetContext, testTitle, testText);
+        sendNotification(targetContext, testTitle, testText);
         UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
