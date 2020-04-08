@@ -27,7 +27,6 @@
     <string name="channel_id">Green_Channel</string>
     <string name="channel_name">Greentooth Channel</string>
     <string name="channel_description">Greentooth Notification Channel</string>
-    <string name="preference_name">Greentooth</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\nMaterial Design Icon by Google\nSPDX-License-Identifier: Apache-2.0</string>
@@ -49,4 +48,6 @@
     <string name="disabled_desc">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected and a small delay has passed.</string>
     <string name="help">Help</string>
     <string name="help_button_text">OK</string>
+    <string name="notification_title">Bluetooth disabled</string>
+    <string name="notification_body">No devices connected.</string>
 </resources>

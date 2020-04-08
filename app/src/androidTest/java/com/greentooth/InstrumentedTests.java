@@ -2,13 +2,11 @@ package com.greentooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -48,7 +46,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.work.testing.WorkManagerTestInitHelper.initializeTestWorkManager;
-import static com.greentooth.Util.SendNotification;
+import static com.greentooth.GreenApplication.APP_KEY;
+import static com.greentooth.GreenApplication.DELAY_KEY;
+import static com.greentooth.GreenApplication.ENABLED_KEY;
+import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.greentooth.Util.sendNotification;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -59,7 +61,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-
+/**
+ * Instrumented test, which will execute on an Android device.
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ */
 @RunWith(AndroidJUnit4.class)
 public class InstrumentedTests {
 
@@ -69,13 +75,12 @@ public class InstrumentedTests {
 
     @Rule
     public ActivityTestRule<MainActivity> activityActivityTestRule =
-            new ActivityTestRule<MainActivity>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void initPrefs() {
         targetContext = getInstrumentation().getTargetContext();
-        String prefName = targetContext.getResources().getString(R.string.preference_name);
-        sharedPreferences = targetContext.getSharedPreferences(prefName, 0);
+        sharedPreferences = targetContext.getSharedPreferences(APP_KEY, 0);
         sharedPreferences.edit().clear().apply();
     }
 
@@ -116,56 +121,57 @@ public class InstrumentedTests {
         assertEquals("com.greentooth", targetContext.getPackageName());
     }
 
-
-
     @Test
     public void userCanClickOnSwitch() {
-        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
-        boolean isEnabled = sharedPreferences.getBoolean("isEnabled", false);
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo())
+                                     .perform(setChecked(true))
+                                     .check(matches(isChecked()));
+        boolean isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
         assertTrue(isEnabled);
         onView(withId(R.id.onSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
-        isEnabled = sharedPreferences.getBoolean("isEnabled", true);
+        isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, true);
         assertFalse(isEnabled);
     }
 
     @Test
     public void switchCardWorksAsSwitch() {
-        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.onSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
-        onView(withId(R.id.switchCard)).perform(click());
-        onView(withId(R.id.onSwitch)).check(matches(isChecked()));
-        boolean isEnabled = sharedPreferences.getBoolean("isEnabled", false);
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(false));
+        onView(withId(R.id.switchCard)).perform(ViewActions.scrollTo()).perform(click());
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).check(matches(isChecked()));
+        boolean isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
         assertTrue(isEnabled);
-        onView(withId(R.id.switchCard)).perform(click());
-        onView(withId(R.id.onSwitch)).check(matches(not(isChecked())));
-        isEnabled = sharedPreferences.getBoolean("isEnabled", true);
+        onView(withId(R.id.switchCard)).perform(ViewActions.scrollTo()).perform(click());
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
+        isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, true);
         assertFalse(isEnabled);
     }
 
     public void userCanClickNotifSwitch() {
-        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
-        onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.notifSwitch)).perform(setChecked(true)).check(matches(isChecked()));
+        onView(withId(R.id.notificationsSwitch)).perform(ViewActions.scrollTo())
+                                        .perform(setChecked(true))
+                                        .check(matches(isChecked()));
+        boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
+        assertTrue(notifEnabled);
+        onView(withId(R.id.notificationsSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
+        notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
+        assertFalse(notifEnabled);
     }
 
     @Test
     public void notifClickerWorksAsSwitch() {
-        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
-        onView((withId(R.id.notifSwitch))).perform(scrollTo());
-        onView(withId(R.id.notifSwitch)).perform(setChecked(false));
-        onView((withId(R.id.notifClicker))).perform(scrollTo());
-        onView(withId(R.id.notifClicker)).perform(click());
-        onView((withId(R.id.notifSwitch))).perform(scrollTo());
-        onView(withId(R.id.notifSwitch)).check(matches(isChecked()));
+        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).perform(setChecked(false));
+        onView((withId(R.id.notifClicker))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).check(matches(isChecked()));
+        boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
+        assertTrue(notifEnabled);
+        onView((withId(R.id.notifClicker))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
+        notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
+        assertFalse(notifEnabled);
     }
 
     @Test
     public void userCanSelectTimeSpinnerOptions() {
-        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
         onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
         for (String selectionText: targetContext.getResources().
                 getStringArray(R.array.wait_entries)) {
@@ -177,16 +183,13 @@ public class InstrumentedTests {
 
     @Test
     public void settingsClickerWorksAsSpinner() {
-        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.onSwitch)).perform(setChecked(true)).check(matches(isChecked()));
         onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
         for (String selectionText : targetContext.getResources().
                 getStringArray(R.array.wait_entries)) {
-            onView((withId(R.id.timeClicker))).perform(ViewActions.scrollTo());
-            onView(withId(R.id.timeClicker)).perform(click());
+            onView((withId(R.id.timeClicker))).perform(ViewActions.scrollTo()).perform(click());
             onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
-            onView((withId(R.id.timeSpinner))).perform(ViewActions.scrollTo());
-            onView(withId(R.id.timeSpinner)).check(matches(withSpinnerText(containsString(selectionText))));
+            onView((withId(R.id.timeSpinner))).perform(ViewActions.scrollTo())
+                                              .check(matches(withSpinnerText(containsString(selectionText))));
         }
     }
 
@@ -195,7 +198,8 @@ public class InstrumentedTests {
         onView(withId(R.id.toolbar)).perform(scrollTo());
         openActionBarOverflowOrOptionsMenu(targetContext);
         onView(withText(R.string.about_menu_title)).perform(click());
-        onView(withId(android.R.id.message)).check(matches(withText(containsString(targetContext.getString(R.string.about_string)))));
+        onView(withId(android.R.id.message))
+                .check(matches(withText(containsString(targetContext.getString(R.string.about_string)))));
         onView(withText(R.string.about_button_positive)).perform(click());
     }
 
@@ -218,7 +222,8 @@ public class InstrumentedTests {
         openThemesMenu();
         onView(withText(R.string.default_theme)).perform(click());
         mode = AppCompatDelegate.getDefaultNightMode();
-        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || Build.MODEL.equals("SM-G950F")) {
+        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P)  || (Build.VERSION.SDK_INT == Build.VERSION_CODES.P
+                && Build.MANUFACTURER.equalsIgnoreCase("samsung"))) {
             assertEquals(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, mode);
         } else {
             assertEquals(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, mode);
@@ -230,7 +235,7 @@ public class InstrumentedTests {
     public void testNotifications() {
         final String testTitle = "My Title";
         final String testText = "My Text";
-        SendNotification(targetContext, testTitle, testText);
+        sendNotification(targetContext, testTitle, testText);
         UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
@@ -245,20 +250,15 @@ public class InstrumentedTests {
         if (!hasBluetooth() || isEmulator()) {
             return null;
         }
-        BluetoothManager bluetoothManager = (BluetoothManager) targetContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         enableBluetooth(bluetoothAdapter);
         //Run without delay for tests
-        sharedPreferences.edit().putInt("wait_time", 0).apply();
+        sharedPreferences.edit().putInt(DELAY_KEY, 0).apply();
         //Setting the switch doesn't seem to be enough, maybe due to threading shenanigans so notifications
         //are enabled manually
-        sharedPreferences.edit().putBoolean("enableNotifications", true).apply();
-        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo());
-        onView(withId(R.id.onSwitch)).perform(setChecked(testArg));
-        if (testArg) {
-            onView(withId(R.id.notifSwitch)).perform(ViewActions.scrollTo());
-            onView(withId(R.id.notifSwitch)).perform(setChecked(true));
-        }
+        sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, true).apply();
+        onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(testArg));
+        onView(withId(R.id.notificationsSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(true));
         initializeTestWorkManager(targetContext);
         Intent intent = new Intent(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         BluetoothReceiver receiver = new BluetoothReceiver();
@@ -267,12 +267,7 @@ public class InstrumentedTests {
     }
 
     public boolean hasBluetooth() {
-        try {
-            BluetoothManager bluetoothManager = (BluetoothManager) targetContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        } catch (NoClassDefFoundError e) {
-            return false;
-        }
-        return targetContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
+        return BluetoothAdapter.getDefaultAdapter() != null;
     }
 
     @SdkSuppress(minSdkVersion = 18)
@@ -283,9 +278,10 @@ public class InstrumentedTests {
             assertFalse(bluetoothAdapter.isEnabled());
             UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
             mDevice.openNotification();
-            mDevice.wait(Until.hasObject(By.textStartsWith("Greentooth")), TIMEOUT);
-            UiObject2 notification = mDevice.findObject(By.textStartsWith("Bluetooth disabled"));
-            assertEquals(notification.getText(), "Bluetooth disabled");
+            mDevice.wait(Until.hasObject(By.textStartsWith(targetContext.getString(R.string.app_name))), TIMEOUT);
+            UiObject2 notification = mDevice.findObject(By.textStartsWith(
+                    targetContext.getString(R.string.notification_title)));
+            assertEquals(notification.getText(), targetContext.getString(R.string.notification_body));
             notification.click();
         }
     }

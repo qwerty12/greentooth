@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_marginBottom="@dimen/mtrl_card_spacing"
+            android:layout_marginBottom="@dimen/card_spacing"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay_Toolbar"
@@ -29,7 +29,7 @@
             android:id="@+id/switchCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/mtrl_card_spacing"
+            android:layout_margin="@dimen/card_spacing"
             android:clickable="true"
             android:focusable="true"
             app:cardBackgroundColor="@color/switchDisabled"
@@ -95,7 +95,7 @@
             android:id="@+id/settingsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/mtrl_card_spacing"
+            android:layout_margin="@dimen/card_spacing"
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="20dp"
@@ -192,7 +192,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/divider" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/notifSwitch"
+                    android:id="@+id/notificationsSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"

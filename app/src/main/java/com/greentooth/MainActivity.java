@@ -1,18 +1,3 @@
-/*
-   Copyright 2020 Nicklas Bergman
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
 package com.greentooth;
 
 import android.animation.ValueAnimator;
@@ -39,8 +24,19 @@ import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 
+import static com.greentooth.GreenApplication.APP_KEY;
+import static com.greentooth.GreenApplication.DELAY_KEY;
+import static com.greentooth.GreenApplication.ENABLED_KEY;
+import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.greentooth.GreenApplication.THEME_KEY;
+import static com.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
+
 public class MainActivity extends AppCompatActivity {
     private int shortAnimationDuration;
+    private SharedPreferences sharedPreferences;
+    private SwitchCompat onSwitch;
+    private Spinner timeSpinner;
+    private SwitchCompat notificationsSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +44,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        final SharedPreferences sharedPreferences = this.getSharedPreferences(this.getString(
-                R.string.preference_name), 0);
+
+        //Set instance variables
         shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
-        SwitchCompat onSwitch = findViewById(R.id.onSwitch);
+        sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
+        onSwitch = findViewById(R.id.onSwitch);
+        timeSpinner = findViewById(R.id.timeSpinner);
+        notificationsSwitch = findViewById(R.id.notificationsSwitch);
+
+        //Set listeners
         onSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             sharedPreferences.edit().putBoolean("isEnabled", isChecked).apply();
             TextView switchText = findViewById(R.id.switchTitle);
@@ -67,17 +68,15 @@ public class MainActivity extends AppCompatActivity {
             }
             updateDescription();
         });
-        Spinner timeSpinner = findViewById(R.id.timeSpinner);
-
         MaterialCardView switchCard = findViewById(R.id.switchCard);
         switchCard.setOnClickListener(v -> onSwitch.setChecked(!onSwitch.isChecked()));
+
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int[] values = getApplicationContext().getResources().getIntArray(R.array.wait_values);
                 sharedPreferences.edit().putInt("wait_time", values[position]).apply();
                 sharedPreferences.edit().putInt("spinner_position", position).apply();
-                updateDescription();
             }
 
             @Override
@@ -87,38 +86,37 @@ public class MainActivity extends AppCompatActivity {
         });
         View timeClicker = findViewById(R.id.timeClicker);
         timeClicker.setOnClickListener(v -> timeSpinner.performClick());
-        SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
-        notifSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean(
-                "enableNotifications", isChecked).apply());
+
+        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, isChecked).apply());
         View notifClicker = findViewById(R.id.notifClicker);
-        notifClicker.setOnClickListener(v -> notifSwitch.setChecked(!notifSwitch.isChecked()));
+        notifClicker.setOnClickListener(v -> notificationsSwitch.setChecked(!notificationsSwitch.isChecked()));
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
-        Spinner timeSpinner = findViewById(R.id.timeSpinner);
-        SwitchCompat onSwitch = findViewById(R.id.onSwitch);
-        SwitchCompat notifSwitch = findViewById(R.id.notifSwitch);
-        timeSpinner.setSelection(sharedPreferences.getInt("spinner_position", 0));
-        onSwitch.setChecked(sharedPreferences.getBoolean("isEnabled", false));
-        notifSwitch.setChecked(sharedPreferences.getBoolean("enableNotifications", false));
+        timeSpinner.setSelection(sharedPreferences.getInt(TIME_SPINNER_POSITION_KEY, 0));
+        onSwitch.setChecked(sharedPreferences.getBoolean(ENABLED_KEY, false));
+        notificationsSwitch.setChecked(sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
-        int themeItemId = sharedPreferences.getInt("theme", R.id.action_default_theme);
+        int themeItemId = sharedPreferences.getInt(THEME_KEY, R.id.action_default_theme);
         menu.findItem(themeItemId).setChecked(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name), 0);
+        if (item.getGroupId() == R.id.theme_group) {
+            item.setChecked(true);
+            sharedPreferences.edit().putInt(THEME_KEY, item.getItemId()).apply();
+        }
         switch (item.getItemId()) {
             case R.id.action_help:
                 showHelp();
@@ -128,22 +126,15 @@ public class MainActivity extends AppCompatActivity {
                 about.show(getSupportFragmentManager(), "com.greentooth.AboutFragment");
                 return true;
             case R.id.action_dark_theme:
-                item.setChecked(true);
-                sharedPreferences.edit().putInt("theme", item.getItemId()).apply();
-                Toast.makeText(this, "Dark theme selected", Toast.LENGTH_SHORT).show();
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 return true;
             case R.id.action_light_theme:
-                item.setChecked(true);
-                sharedPreferences.edit().putInt("theme", item.getItemId()).apply();
-                Toast.makeText(this, "Light theme selected", Toast.LENGTH_SHORT).show();
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 return true;
             case R.id.action_default_theme:
-                item.setChecked(true);
-                sharedPreferences.edit().putInt("theme", item.getItemId()).apply();
-                Toast.makeText(this, "Default theme selected", Toast.LENGTH_SHORT).show();
-                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P) || Build.MODEL.equals("SM-G950F")) {
+                //Samsung phones have night mode in Android Pie
+                if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.P) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.P
+                && Build.MANUFACTURER.equalsIgnoreCase("samsung"))) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
