@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +20,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
+        MaterialToolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
         //Set instance variables
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Set listeners
         onSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sharedPreferences.edit().putBoolean("isEnabled", isChecked).apply();
+            sharedPreferences.edit().putBoolean(ENABLED_KEY, isChecked).apply();
             TextView switchText = findViewById(R.id.switchTitle);
             MaterialCardView switchCard = findViewById(R.id.switchCard);
             final int switchCardDisabledColor = getResources().getColor(R.color.switchDisabled);
@@ -75,14 +75,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int[] values = getApplicationContext().getResources().getIntArray(R.array.wait_values);
-                sharedPreferences.edit().putInt("wait_time", values[position]).apply();
-                sharedPreferences.edit().putInt("spinner_position", position).apply();
+                sharedPreferences.edit().putInt(DELAY_KEY, values[position]).apply();
+                sharedPreferences.edit().putInt(TIME_SPINNER_POSITION_KEY, position).apply();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // *tumbleweeds roll by*
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
         View timeClicker = findViewById(R.id.timeClicker);
         timeClicker.setOnClickListener(v -> timeSpinner.performClick());
@@ -146,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateDescription() {
-        SwitchCompat onSwitch = findViewById(R.id.onSwitch);
         TextView switchDesc = findViewById(R.id.switchDesc);
         if (onSwitch.isChecked()) {
             switchDesc.setText(getResources().getString(R.string.enabled_desc));
@@ -163,14 +160,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showHelp() {
-        View view = getLayoutInflater().inflate(R.layout.help_sheet, null);
+        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.help_sheet, null);
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(view);
         Button helpButton = dialog.findViewById(R.id.helpButton);
         helpButton.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
-        /*BottomSheetHelpDialogFragment bottomSheetHelpDialogFragment = new BottomSheetHelpDialogFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        bottomSheetHelpDialogFragment.show(fragmentManager, "modalSheetDialog");*/
     }
 }

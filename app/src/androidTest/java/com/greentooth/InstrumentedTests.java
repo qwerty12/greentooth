@@ -275,14 +275,17 @@ public class InstrumentedTests {
     public void testToggledOnAppFunction() {
         BluetoothAdapter bluetoothAdapter = bluetoothTestHelper(true);
         if (bluetoothAdapter != null) {
+            final String testTitle = targetContext.getString(R.string.notification_title);
+            final String testText = targetContext.getString(R.string.notification_body);
             assertFalse(bluetoothAdapter.isEnabled());
             UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
             mDevice.openNotification();
-            mDevice.wait(Until.hasObject(By.textStartsWith(targetContext.getString(R.string.app_name))), TIMEOUT);
-            UiObject2 notification = mDevice.findObject(By.textStartsWith(
-                    targetContext.getString(R.string.notification_title)));
-            assertEquals(notification.getText(), targetContext.getString(R.string.notification_body));
-            notification.click();
+            mDevice.wait(Until.hasObject(By.textStartsWith(testTitle)), TIMEOUT);
+            UiObject2 notificationTitle = mDevice.findObject(By.text(testTitle));
+            assertEquals(notificationTitle.getText(), testTitle);
+            UiObject2 notificationText = mDevice.findObject(By.text(testText));
+            assertEquals(notificationText.getText(), testText);
+            notificationText.click();
         }
     }
 
