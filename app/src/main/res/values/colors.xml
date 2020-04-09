@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#32832B</color>
+    <color name="primaryColor">#2E7D32</color>
     <color name="colorOnSurface">#000000</color>
     <color name="primaryColorVariant">#1f7745</color>
     <color name="onPrimaryColor">#FFFFFF</color>
@@ -8,4 +8,9 @@
     <color name="switchDisabled">#646464</color>
     <color name="switchTextColor">#FFFFFF</color>
     <color name="colorSurface">#FFFFFF</color>
+    <color name="secondaryColorVariant">#96e686</color>
+    <color name="onSecondaryColor">#000000</color>
+    <color name="primaryDarkColor">#1B5E20</color>
+    <color name="onPrimarySurfaceColor">#FFFFFF</color>
+    <color name="switchThumbDisabledColor">#ffd6d7d7</color>
 </resources>

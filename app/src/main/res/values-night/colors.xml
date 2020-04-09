@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#1B5E20</color>
+
     <color name="colorOnSurface">#FFFFFF</color>
     <color name="primaryColorVariant">#1B5E20</color>
     <color name="onPrimaryColor">#FFFFFF</color>
@@ -8,4 +8,7 @@
     <color name="switchDisabled">#646464</color>
     <color name="switchTextColor">#FFFFFF</color>
     <color name="colorSurface">#121212</color>
+    <color name="secondaryColorVariant">#96e686</color>
+    <color name="onSecondaryColor">#000000</color>
+
 </resources>
