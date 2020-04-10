@@ -18,11 +18,8 @@ public class AboutFragment extends DialogFragment {
         //In case something goes wrong
         String version = "1.0";
         try {
-            version = getContext().getPackageManager().getPackageInfo(
-                    "com.greentooth", 0).versionName;
+            version = getContext().getPackageManager().getPackageInfo("com.greentooth", 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         stringBuilder.append(version);
