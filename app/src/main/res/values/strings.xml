@@ -40,4 +40,7 @@
     <string name="help_button_text">OK</string>
     <string name="notification_title">Bluetooth disabled</string>
     <string name="notification_body">No devices connected.</string>
+    <string name="enable_greentooth">Enable Greentooth</string>
+    <string name="minimum_delay">Minimum delay</string>
+    <string name="enable_notifications">Enable notifications</string>
 </resources>

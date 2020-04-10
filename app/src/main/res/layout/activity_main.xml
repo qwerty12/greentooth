@@ -21,7 +21,7 @@
             android:theme="@style/ThemeOverlay_Toolbar"
             app:menu="@menu/main_menu"
             app:popupTheme="@style/Menu_Theme"
-            app:title="Greentooth" />
+            app:title="@string/app_name" />
 
 
         <com.google.android.material.card.MaterialCardView
@@ -74,7 +74,8 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/switchTitle"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="#FFFFFF" />
+                    app:thumbTint="#FFFFFF"
+                    android:contentDescription="@string/enable_greentooth"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -145,7 +146,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/timeClicker"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.75" />
+                    app:layout_constraintVertical_bias="0.75"
+                    android:contentDescription="@string/minimum_delay"/>
 
                 <View
                     android:id="@+id/timeClicker"
@@ -172,7 +174,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@null"/>
 
                 <TextView
                     android:id="@+id/notifTitle"
@@ -198,7 +201,8 @@
                     android:padding="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider"
+                    android:contentDescription="@string/enable_notifications"/>
 
                 <View
                     android:id="@+id/notifClicker"
