@@ -13,14 +13,14 @@
         <item>@string/time_120</item>
     </string-array>
     <string name="help_1">Bluetooth can cause unnecessary battery drain and represents a security risk if it is turned
-        on when you\'re not using it.</string>
+        on when you\'re not using it. However, turning it off is easily forgotten.</string>
     <string name="help_2">Greentooth helps you save battery and mitigate the security risks of Bluetooth by
         automatically turning Bluetooth off when you\'re no longer using it.</string>
     <string name="help_3">When the last Bluetooth device has disconnected Greentooth will wait for an adjustable amount
         of time in order to not disturb any connection/reconnection attempts and then deactivate Bluetooth.</string>
     <string name="channel_name">Greentooth Channel</string>
     <string name="channel_description">Greentooth Notification Channel</string>
-    <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\nMaterial Design Icon by Google\nSPDX-License-Identifier: Apache-2.0</string>
+    <string name="about_string">\n\nCopyright 2020 Greentooth contributors\nSPDX-License-Identifier: Apache-2.0</string>
     <string name="about_button_positive">OK</string>
     <string name="about_menu_title">About</string>
     <string name="themes_menu">Theme</string>
