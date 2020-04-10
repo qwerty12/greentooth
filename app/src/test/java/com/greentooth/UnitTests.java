@@ -2,16 +2,12 @@ package com.greentooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
-import android.os.Build;
 
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 import static android.bluetooth.BluetoothProfile.GATT;
 import static android.bluetooth.BluetoothProfile.HEADSET;
@@ -130,20 +126,6 @@ public class UnitTests {
         setAPI(0);
     }
 
-    private static void setFinalStatic(Field field, Object newValue) {
-        try {
-            field.setAccessible(true);
-
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-            field.set(null, newValue);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void setMockConnectionState(int profile, int state) {
         when(bluetoothAdapter.getProfileConnectionState(profile)).thenReturn(state);
     }
@@ -153,11 +135,6 @@ public class UnitTests {
     }
 
     private void setAPI(int level) {
-        try {
-            setFinalStatic(Build.VERSION.class.getField("SDK_INT"), level);
-            Util.setBluetoothProfiles(level);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+        Util.setBluetoothProfiles(level);
     }
 }
