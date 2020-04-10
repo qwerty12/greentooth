@@ -1,4 +1,4 @@
-package com.greentooth;
+package com.smilla.greentooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -8,11 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import static com.greentooth.GreenApplication.APP_KEY;
-import static com.greentooth.GreenApplication.ENABLED_KEY;
-import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
-import static com.greentooth.Util.isBluetoothConnected;
-import static com.greentooth.Util.isBluetoothEnabled;
+import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
+import static com.smilla.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.Util.isBluetoothConnected;
+import static com.smilla.greentooth.Util.isBluetoothEnabled;
 
 public class BluetoothWorker extends Worker {
 

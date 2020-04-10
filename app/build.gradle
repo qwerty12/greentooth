@@ -23,7 +23,7 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        applicationId "com.greentooth"
+        applicationId "com.smilla.greentooth"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 2
@@ -63,4 +63,5 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.work:work-testing:2.3.4'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    androidTestImplementation 'junit:junit:4.13'
 }

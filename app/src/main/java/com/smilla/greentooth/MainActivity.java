@@ -1,4 +1,4 @@
-package com.greentooth;
+package com.smilla.greentooth;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -24,12 +24,12 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 
-import static com.greentooth.GreenApplication.APP_KEY;
-import static com.greentooth.GreenApplication.DELAY_KEY;
-import static com.greentooth.GreenApplication.ENABLED_KEY;
-import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
-import static com.greentooth.GreenApplication.THEME_KEY;
-import static com.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
+import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
+import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
+import static com.smilla.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.GreenApplication.THEME_KEY;
+import static com.smilla.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
 
 public class MainActivity extends AppCompatActivity {
     private int shortAnimationDuration;
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         notifClicker.setOnClickListener(v -> notificationsSwitch.setChecked(!notificationsSwitch.isChecked()));
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -120,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 showHelp();
                 return true;
             case R.id.action_about:
-                com.greentooth.AboutFragment about = new AboutFragment();
-                about.show(getSupportFragmentManager(), "com.greentooth.AboutFragment");
+                AboutFragment about = new AboutFragment();
+                about.show(getSupportFragmentManager(), "com.smilla.greentooth.AboutFragment");
                 return true;
             case R.id.action_dark_theme:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

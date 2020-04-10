@@ -1,4 +1,4 @@
-package com.greentooth;
+package com.smilla.greentooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -46,11 +46,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.work.testing.WorkManagerTestInitHelper.initializeTestWorkManager;
-import static com.greentooth.GreenApplication.APP_KEY;
-import static com.greentooth.GreenApplication.DELAY_KEY;
-import static com.greentooth.GreenApplication.ENABLED_KEY;
-import static com.greentooth.GreenApplication.NOTIFICATIONS_KEY;
-import static com.greentooth.Util.sendNotification;
+import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
+import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
+import static com.smilla.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.Util.sendNotification;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -118,7 +118,7 @@ public class InstrumentedTests {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        assertEquals("com.greentooth", targetContext.getPackageName());
+        assertEquals("com.com.smilla.greentooth", targetContext.getPackageName());
     }
 
     @Test

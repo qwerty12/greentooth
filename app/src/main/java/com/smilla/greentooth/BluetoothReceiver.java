@@ -1,4 +1,4 @@
-package com.greentooth;
+package com.smilla.greentooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,11 +14,11 @@ import androidx.work.WorkManager;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.greentooth.GreenApplication.APP_KEY;
-import static com.greentooth.GreenApplication.DELAY_KEY;
-import static com.greentooth.GreenApplication.ENABLED_KEY;
-import static com.greentooth.Util.isBluetoothConnected;
-import static com.greentooth.Util.isBluetoothEnabled;
+import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
+import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
+import static com.smilla.greentooth.Util.isBluetoothConnected;
+import static com.smilla.greentooth.Util.isBluetoothEnabled;
 
 
 public class BluetoothReceiver extends BroadcastReceiver {

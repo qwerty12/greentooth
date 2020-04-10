@@ -1,4 +1,4 @@
-package com.greentooth;
+package com.smilla.greentooth;
 
 import android.app.Application;
 import android.app.NotificationChannel;

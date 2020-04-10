@@ -1,4 +1,4 @@
-package com.greentooth;
+package com.smilla.greentooth;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -13,9 +13,9 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import static com.greentooth.GreenApplication.APP_KEY;
-import static com.greentooth.GreenApplication.CHANNEL_ID;
-import static com.greentooth.GreenApplication.LAST_NOTIFICATION_ID_KEY;
+import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.CHANNEL_ID;
+import static com.smilla.greentooth.GreenApplication.LAST_NOTIFICATION_ID_KEY;
 
 class Util {
 

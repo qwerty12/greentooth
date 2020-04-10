@@ -1,4 +1,4 @@
-package com.greentooth;
+package com.smilla.greentooth;
 
 import android.app.Dialog;
 import android.content.pm.PackageManager;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-
 
 
 public class AboutFragment extends DialogFragment {
@@ -18,7 +17,7 @@ public class AboutFragment extends DialogFragment {
         //In case something goes wrong
         String version = "1.0";
         try {
-            version = getContext().getPackageManager().getPackageInfo("com.greentooth", 0).versionName;
+            version = getContext().getPackageManager().getPackageInfo("com.smilla.greentooth", 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
