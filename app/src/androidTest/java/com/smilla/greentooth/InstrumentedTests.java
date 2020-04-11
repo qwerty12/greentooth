@@ -118,7 +118,7 @@ public class InstrumentedTests {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        assertEquals("com.com.smilla.greentooth", targetContext.getPackageName());
+        assertEquals("com.smilla.greentooth", targetContext.getPackageName());
     }
 
     @Test
