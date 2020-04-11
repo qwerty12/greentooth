@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -57,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
             sharedPreferences.edit().putBoolean(ENABLED_KEY, isChecked).apply();
             TextView switchText = findViewById(R.id.switchTitle);
             MaterialCardView switchCard = findViewById(R.id.switchCard);
-            final int switchCardDisabledColor = getResources().getColor(R.color.switchDisabled);
-            final int switchCardEnabledColor = getResources().getColor(R.color.primaryColorVariant);
+            final int switchCardDisabledColor = ContextCompat.getColor(this, R.color.switchDisabled);
+            final int switchCardEnabledColor = ContextCompat.getColor(this, R.color.primaryColorVariant);
             if (isChecked) {
                 switchText.setText(R.string.enabled);
                 changeCardColor(switchCard, switchCardDisabledColor, switchCardEnabledColor);
