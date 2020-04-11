@@ -21,7 +21,8 @@
             android:theme="@style/ThemeOverlay_Toolbar"
             app:menu="@menu/main_menu"
             app:popupTheme="@style/Menu_Theme"
-            app:title="@string/app_name" />
+            app:title="@string/app_name"
+            tools:ignore="UnusedAttribute"/>
 
 
         <com.google.android.material.card.MaterialCardView
@@ -129,7 +130,8 @@
                     app:layout_constraintEnd_toStartOf="@+id/timeSpinner"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/waitTitle"
-                    android:paddingStart="8dp" />
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry" />
 
                 <Spinner
                     android:id="@+id/timeSpinner"
@@ -229,7 +231,8 @@
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/notifTitle"
-                    android:paddingStart="8dp" />
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline"

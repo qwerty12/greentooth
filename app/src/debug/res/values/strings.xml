@@ -1,11 +1,11 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="time_none">None</string>
     <string name="time_20">20 seconds</string>
     <string name="time_30">30 seconds</string>
     <string name="time_60">1 minute</string>
     <string name="time_90">1 minute 30 seconds</string>
     <string name="time_120">2 minutes</string>
-    <string-array name="wait_entries">
+    <string-array name="wait_entries" tools:ignore="InconsistentArrays">
         <item>@string/time_none</item>
         <item>@string/time_20</item>
         <item>@string/time_30</item>

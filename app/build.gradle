@@ -45,6 +45,10 @@ android {
         targetCompatibility = 1.8
     }
 
+    lintOptions {
+        disable 'VectorRaster','NotificationIconCompatibility'
+    }
+
 }
 
 dependencies {

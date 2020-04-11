@@ -91,6 +91,7 @@ public class UnitTests {
         assertFalse(isConnected());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testIsBluetoothConnectedAPI29() {
         setAPI(29);
@@ -111,6 +112,7 @@ public class UnitTests {
         assertNotEquals(testArray, Util.getBluetoothProfiles());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testGetBluetoothProfiles() {
         setAPI(0);
