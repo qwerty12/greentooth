@@ -1,0 +1,1 @@
+Automaticallly switches off Bluetooth upon last device disconnection.

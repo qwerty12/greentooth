@@ -20,7 +20,7 @@
         checks for idle Bluetooth.</string>
     <string name="channel_name">Greentooth Channel</string>
     <string name="channel_description">Greentooth Notification Channel</string>
-    <string name="about_string">\n\nCopyright 2020 Greentooth contributors\nSPDX-License-Identifier: Apache-2.0</string>
+    <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0</string>
     <string name="about_button_positive">OK</string>
     <string name="about_menu_title">About</string>
     <string name="themes_menu">Theme</string>
