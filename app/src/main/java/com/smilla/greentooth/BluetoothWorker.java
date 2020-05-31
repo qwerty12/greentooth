@@ -10,7 +10,9 @@ import androidx.work.WorkerParameters;
 
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
 import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
-import static com.smilla.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.GreenApplication.NOTIFICATION_TAG;
+import static com.smilla.greentooth.GreenApplication.POST_DISABLE_NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATION_ID;
 import static com.smilla.greentooth.Util.isBluetoothConnected;
 import static com.smilla.greentooth.Util.isBluetoothEnabled;
 
@@ -33,10 +35,12 @@ public class BluetoothWorker extends Worker {
                 && !bluetoothAdapter.isDiscovering() && greentoothEnabled) {
             boolean disabled = bluetoothAdapter.disable();
             if (disabled) {
-                boolean notificationsEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
-                if (notificationsEnabled) {
+                //Remove pre-disable notification if there is one
+                Util.cancelNotification(context, NOTIFICATION_TAG, PRE_DISABLE_NOTIFICATION_ID);
+                boolean postDisableNotificationsEnabled = sharedPreferences.getBoolean(POST_DISABLE_NOTIFICATIONS_KEY, false);
+                if (postDisableNotificationsEnabled) {
                     Util.sendNotification(context, context.getString(R.string.notification_title),
-                            context.getString(R.string.notification_body));
+                            context.getString(R.string.notification_body), GreenApplication.NOTIFICATION_TYPE_POST_DISABLE);
                 }
                 return Result.success();
             } else {

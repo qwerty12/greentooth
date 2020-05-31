@@ -121,16 +121,17 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/waitText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
+                    android:paddingStart="8dp"
                     android:paddingLeft="8dp"
                     android:text="@string/wait_desc"
                     app:layout_constraintEnd_toStartOf="@+id/timeSpinner"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/waitTitle"
-                    android:paddingStart="8dp"
                     tools:ignore="RtlSymmetry" />
 
                 <Spinner
@@ -138,18 +139,17 @@
                     style="@style/Widget.AppCompat.Spinner"
                     android:layout_width="@dimen/_130sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/minimum_delay"
                     android:duplicateParentState="false"
                     android:entries="@array/wait_entries"
-                    android:padding="8dp"
                     android:spinnerMode="dialog"
-                    app:layout_constraintBottom_toBottomOf="@+id/timeClicker"
+                    app:layout_constraintBottom_toTopOf="@id/divider1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.75"
-                    android:contentDescription="@string/minimum_delay"/>
+                    app:layout_constraintTop_toBottomOf="@+id/waitTitle"
+                    app:layout_constraintVertical_bias="0.75" />
 
                 <View
                     android:id="@+id/timeClicker"
@@ -157,14 +157,85 @@
                     android:layout_height="0dp"
                     android:clickable="true"
                     android:focusable="true"
-                    app:layout_constraintBottom_toTopOf="@+id/divider"
+                    app:layout_constraintBottom_toTopOf="@+id/divider1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="gone" />
 
                 <View
-                    android:id="@+id/divider"
+                    android:id="@+id/divider1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.2"
+                    android:background="@color/colorOnSurface"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/waitText"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/preDisableNotificationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:padding="8dp"
+                    android:text="@string/pre_disabling_notifications"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/preDisableNotificationSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:duplicateParentState="false"
+                    android:focusable="false"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toTopOf="@id/divider2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1"
+                    android:contentDescription="@string/enable_notifications"/>
+
+                <View
+                    android:id="@+id/preDisableNotificationClicker"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toTopOf="@id/divider2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/preDisableNotificationText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/pre_disabling_notifications_desc"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/preDisableNotificationTitle"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <View
+                    android:id="@+id/divider2"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginStart="16dp"
@@ -173,27 +244,25 @@
                     android:layout_marginRight="16dp"
                     android:alpha="0.2"
                     android:background="@color/colorOnSurface"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:contentDescription="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@null"/>
+                    app:layout_constraintTop_toBottomOf="@id/preDisableNotificationText" />
 
                 <TextView
-                    android:id="@+id/notifTitle"
+                    android:id="@+id/postDisableNotificationTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:padding="8dp"
-                    android:text="@string/notifications"
+                    android:text="@string/post_disabling_notifications"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/notificationsSwitch"
+                    android:id="@+id/postDisableNotificationSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -201,24 +270,13 @@
                     android:duplicateParentState="false"
                     android:focusable="false"
                     android:padding="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:contentDescription="@string/enable_notifications"/>
 
-                <View
-                    android:id="@+id/notifClicker"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider"
-                    tools:visibility="gone" />
-
                 <TextView
+                    android:id="@+id/postDisableNotificationText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -226,20 +284,31 @@
                     android:layout_marginBottom="8dp"
                     android:paddingLeft="8dp"
                     android:paddingBottom="8dp"
-                    android:text="@string/notif_desc"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/post_disabling_notifications_desc"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/notifTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/postDisableNotificationTitle"
                     android:paddingStart="8dp"
                     tools:ignore="RtlSymmetry" />
+
+                <View
+                    android:id="@+id/postDisableNotificationClicker"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2"
+                    tools:visibility="gone" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.8" />
+                    app:layout_constraintGuide_percent="0.74" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

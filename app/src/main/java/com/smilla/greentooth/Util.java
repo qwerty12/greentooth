@@ -7,15 +7,17 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
-import static com.smilla.greentooth.GreenApplication.CHANNEL_ID;
 import static com.smilla.greentooth.GreenApplication.LAST_NOTIFICATION_ID_KEY;
+import static com.smilla.greentooth.GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE;
+import static com.smilla.greentooth.GreenApplication.POST_DISABLE_CHANNEL_ID;
+import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_CHANNEL_ID;
+import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATION_ID;
 
 class Util {
 
@@ -78,32 +80,56 @@ class Util {
         return false;
     }
 
-    static void sendNotification(Context context, String title, String body) {
+    static void cancelNotification(Context context, String tag, int notificationId) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(tag, notificationId);
+    }
+
+    static void sendNotification(Context context, String title, String body, int notificationType) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 0, intent, 0);
+        String channelID;
+        if (notificationType == NOTIFICATION_TYPE_PRE_DISABLE) {
+            channelID = PRE_DISABLE_CHANNEL_ID;
+        } else {
+            channelID = POST_DISABLE_CHANNEL_ID;
+        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
-                CHANNEL_ID)
+                channelID)
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setColorized(true)
-                .setColor(Color.GREEN)
-                .setLights(Color.rgb(31, 85, 244), 200, 200)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
+        int notificationId;
+        if (notificationType == NOTIFICATION_TYPE_PRE_DISABLE) {
+            notificationId = PRE_DISABLE_NOTIFICATION_ID;
+            builder.setPriority(NotificationCompat.PRIORITY_LOW);
+
+            Intent tempDisableIntent = new Intent(context, BluetoothReceiver.class);
+            tempDisableIntent.setAction(GreenApplication.ACTION_TEMP_DISABLE);
+            PendingIntent tempDisablePendingEvent = PendingIntent.getBroadcast(context, 0, tempDisableIntent, 0);
+            builder.addAction(0, context.getString(R.string.abort_button), tempDisablePendingEvent);
+
+            Intent disableIntent = new Intent(context, BluetoothReceiver.class);
+            disableIntent.setAction(GreenApplication.ACTION_DISABLE);
+            PendingIntent disablePendingEvent = PendingIntent.getBroadcast(context, 0, disableIntent, 0);
+            builder.addAction(0, context.getString(R.string.disable_button), disablePendingEvent);
+
+        } else {
+            notificationId = getNextNotificationId(context);
+        }
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        int notificationId = getNextNotificationId(context);
-        notificationManager.notify(notificationId, builder.build());
+        notificationManager.notify("TAG", notificationId, builder.build());
     }
 
     private static int getNextNotificationId(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(APP_KEY,0);
         int id = sharedPreferences.getInt(LAST_NOTIFICATION_ID_KEY, 0) + 1;
         if (id == Integer.MAX_VALUE) {
-            id = 0;
+            id = 1;
         }
         sharedPreferences.edit().putInt(LAST_NOTIFICATION_ID_KEY, id).apply();
         return id;
