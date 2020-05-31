@@ -49,7 +49,8 @@ import static androidx.work.testing.WorkManagerTestInitHelper.initializeTestWork
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
 import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
 import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
-import static com.smilla.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.GreenApplication.POST_DISABLE_NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.Util.sendNotification;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -70,6 +71,10 @@ import static org.junit.Assert.assertTrue;
 public class InstrumentedTests {
 
     private static final long TIMEOUT = 15;
+    //Resource id of button that expands notifications
+    private static final String EXPAND_BUTTON_RES_ID = "android:id/expand_button";
+    //Resource id of button to clear all notifications
+    private static final String CLEAR_ALL_BUTTON_ID = "com.android.systemui:id/dismiss_text";
     private SharedPreferences sharedPreferences;
     private Context targetContext;
 
@@ -146,27 +151,53 @@ public class InstrumentedTests {
         assertFalse(isEnabled);
     }
 
-    public void userCanClickNotifSwitch() {
-        onView(withId(R.id.notificationsSwitch)).perform(ViewActions.scrollTo())
+    @Test
+    public void userCanClickPreDisableNotificationSwitch() {
+        onView(withId(R.id.preDisableNotificationSwitch)).perform(ViewActions.scrollTo())
                                         .perform(setChecked(true))
                                         .check(matches(isChecked()));
-        boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
+        boolean notifEnabled = sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, false);
         assertTrue(notifEnabled);
-        onView(withId(R.id.notificationsSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
-        notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
+        onView(withId(R.id.preDisableNotificationSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
+        notifEnabled = sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, true);
         assertFalse(notifEnabled);
     }
 
     @Test
-    public void notifClickerWorksAsSwitch() {
-        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).perform(setChecked(false));
-        onView((withId(R.id.notifClicker))).perform(ViewActions.scrollTo()).perform(click());
-        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).check(matches(isChecked()));
-        boolean notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false);
+    public void preDisableNotificationClickerWorksAsSwitch() {
+        onView((withId(R.id.preDisableNotificationSwitch))).perform(ViewActions.scrollTo()).perform(setChecked(false));
+        onView((withId(R.id.preDisableNotificationClicker))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.preDisableNotificationSwitch))).perform(ViewActions.scrollTo()).check(matches(isChecked()));
+        boolean notifEnabled = sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, false);
         assertTrue(notifEnabled);
-        onView((withId(R.id.notifClicker))).perform(ViewActions.scrollTo()).perform(click());
-        onView((withId(R.id.notificationsSwitch))).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
-        notifEnabled = sharedPreferences.getBoolean(NOTIFICATIONS_KEY, true);
+        onView((withId(R.id.preDisableNotificationClicker))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.preDisableNotificationSwitch))).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
+        notifEnabled = sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, true);
+        assertFalse(notifEnabled);
+    }
+
+    @Test
+    public void userCanClickPostDisableNotificationSwitch() {
+        onView(withId(R.id.postDisableNotificationSwitch)).perform(ViewActions.scrollTo())
+                .perform(setChecked(true))
+                .check(matches(isChecked()));
+        boolean notifEnabled = sharedPreferences.getBoolean(POST_DISABLE_NOTIFICATIONS_KEY, false);
+        assertTrue(notifEnabled);
+        onView(withId(R.id.postDisableNotificationSwitch)).perform(setChecked(false)).check(matches(not(isChecked())));
+        notifEnabled = sharedPreferences.getBoolean(POST_DISABLE_NOTIFICATIONS_KEY, true);
+        assertFalse(notifEnabled);
+    }
+
+    @Test
+    public void postDisableNotificationClickerWorksAsSwitch() {
+        onView((withId(R.id.postDisableNotificationSwitch))).perform(ViewActions.scrollTo()).perform(setChecked(false));
+        onView((withId(R.id.postDisableNotificationClicker))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.postDisableNotificationSwitch))).perform(ViewActions.scrollTo()).check(matches(isChecked()));
+        boolean notifEnabled = sharedPreferences.getBoolean(POST_DISABLE_NOTIFICATIONS_KEY, false);
+        assertTrue(notifEnabled);
+        onView((withId(R.id.postDisableNotificationClicker))).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.postDisableNotificationSwitch))).perform(ViewActions.scrollTo()).check(matches(not(isChecked())));
+        notifEnabled = sharedPreferences.getBoolean(POST_DISABLE_NOTIFICATIONS_KEY, true);
         assertFalse(notifEnabled);
     }
 
@@ -232,10 +263,11 @@ public class InstrumentedTests {
 
     @SdkSuppress(minSdkVersion = 18)
     @Test
-    public void testNotifications() {
-        final String testTitle = "My Title";
-        final String testText = "My Text";
-        sendNotification(targetContext, testTitle, testText);
+    public void testPostDisableNotifications() {
+        final String testTitle = "Post Disable Title";
+        final String testText = "Post Disable Text";
+        clearNotifications();
+        sendNotification(targetContext, testTitle, testText, GreenApplication.NOTIFICATION_TYPE_POST_DISABLE);
         UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
@@ -244,6 +276,65 @@ public class InstrumentedTests {
         UiObject2 notificationText = mDevice.findObject(By.text(testText));
         assertEquals(notificationText.getText(), testText);
         notificationText.click();
+    }
+
+    @SdkSuppress(minSdkVersion = 18)
+    @Test
+    public void testPreDisableNotifications() {
+        final String testTitle = "Pre Disable Title";
+        final String testText = "Pre Disable Text";
+        clearNotifications();
+        sendNotification(targetContext, testTitle, testText, GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE);
+        UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
+        UiObject2 notificationTitle = mDevice.findObject(By.text(testTitle));
+        assertEquals(notificationTitle.getText(), testTitle);
+        UiObject2 notificationText = mDevice.findObject(By.text(testText));
+        assertEquals(notificationText.getText(), testText);
+        notificationText.click();
+    }
+
+    @SdkSuppress(minSdkVersion = 18)
+    @Test
+    public void testCanClickNotificationAbortButton() {
+        final String testTitle = "Abort button test title";
+        final String testText = "Abort button test text";
+        clearNotifications();
+        sendNotification(targetContext, testTitle, testText, GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE);
+        UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
+        //Expand notification if it starts collapsed
+        UiObject2 abortButton = mDevice.findObject(By.desc(targetContext.getString(R.string.abort_button)));
+        if (abortButton == null) {
+            UiObject2 expandButton = mDevice.findObject(By.res(EXPAND_BUTTON_RES_ID));
+            expandButton.click();
+            abortButton = mDevice.findObject(By.desc(targetContext.getString(R.string.abort_button)));
+        }
+        abortButton.click();
+    }
+
+    @SdkSuppress(minSdkVersion = 18)
+    @Test
+    public void testCanClickNotificationDisableButton() {
+        final String testTitle = "Disable button test title";
+        final String testText = "Disable button test text";
+        clearNotifications();
+        sendNotification(targetContext, testTitle, testText, GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE);
+        UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
+        //Expand notification if it starts collapsed
+        UiObject2 disableButton = mDevice.findObject(By.desc(targetContext.getString(R.string.disable_button)));
+        if (disableButton == null) {
+            UiObject2 expandButton = mDevice.findObject(By.res(EXPAND_BUTTON_RES_ID));
+            expandButton.click();
+            disableButton = mDevice.findObject(By.desc(targetContext.getString(R.string.disable_button)));
+        }
+        disableButton.click();
+        boolean isEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
+        assertFalse(isEnabled);
     }
 
     public BluetoothAdapter bluetoothTestHelper(Boolean testArg) {
@@ -256,9 +347,9 @@ public class InstrumentedTests {
         sharedPreferences.edit().putInt(DELAY_KEY, 0).apply();
         //Setting the switch doesn't seem to be enough, maybe due to threading shenanigans so notifications
         //are enabled manually
-        sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, true).apply();
+        sharedPreferences.edit().putBoolean(POST_DISABLE_NOTIFICATIONS_KEY, true).apply();
         onView(withId(R.id.onSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(testArg));
-        onView(withId(R.id.notificationsSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(true));
+        onView(withId(R.id.postDisableNotificationSwitch)).perform(ViewActions.scrollTo()).perform(setChecked(true));
         initializeTestWorkManager(targetContext);
         Intent intent = new Intent(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         BluetoothReceiver receiver = new BluetoothReceiver();
@@ -349,6 +440,15 @@ public class InstrumentedTests {
                 || Build.PRODUCT.contains("simulator");
     }
 
-
+    private void clearNotifications() {
+        UiDevice mDevice = UiDevice.getInstance(getInstrumentation());
+        mDevice.openNotification();
+        UiObject2 clearAll = mDevice.findObject(By.res(CLEAR_ALL_BUTTON_ID));
+        if (clearAll != null) {
+            clearAll.click();
+        } else {
+            mDevice.pressBack();
+        }
+    }
 
 }

@@ -18,8 +18,10 @@
         of time in order to not disturb any connection/reconnection attempts and then deactivate Bluetooth.</string>
     <string name="help_3">Please note that Greentooth only runs upon device disconnection, it does not do periodical
         checks for idle Bluetooth.</string>
-    <string name="channel_name">Greentooth Channel</string>
-    <string name="channel_description">Greentooth Notification Channel</string>
+    <string name="post_disable_channel_name">Post disabling notifications</string>
+    <string name="post_disable_channel_description">Notifications sent after Bluetooth is disabled</string>
+    <string name="pre_disable_channel_name">Pre disabling notifications</string>
+    <string name="pre_disable_channel_description">Notifications sent before Bluetooth is disabled</string>
     <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0</string>
     <string name="about_button_positive">OK</string>
     <string name="about_menu_title">About</string>
@@ -30,8 +32,10 @@
     <string name="switch_description">Enable Greentooth to automatically turn Bluetooth off when the last device has disconnected.</string>
     <string name="wait_title">Delay</string>
     <string name="wait_desc">Minimum delay before Bluetooth is turned off. </string>
-    <string name="notifications">Notifications</string>
-    <string name="notif_desc">Show a notification when Bluetooth has been disabled.</string>
+    <string name="pre_disabling_notifications">Notify before disabling</string>
+    <string name="pre_disabling_notifications_desc">Send a low-priority notification before Bluetooth is turned off, with options to keep Bluetooth on temporarily or disable Greentooth entirely.</string>
+    <string name="post_disabling_notifications">Notify after disabling</string>
+    <string name="post_disabling_notifications_desc">Send a notification after Bluetooth has been turned off.</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="enabled_desc">Greentooth is enabled and will turn off Bluetooth when it is no longer in use.</string>
@@ -43,4 +47,6 @@
     <string name="enable_greentooth">Enable Greentooth</string>
     <string name="minimum_delay">Minimum delay</string>
     <string name="enable_notifications">Enable notifications</string>
+    <string name="abort_button">Keep Bluetooth on</string>
+    <string name="disable_button">Disable Greentooth</string>
 </resources>

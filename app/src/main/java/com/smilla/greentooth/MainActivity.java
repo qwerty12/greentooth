@@ -2,6 +2,10 @@ package com.smilla.greentooth;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,7 +32,8 @@ import com.google.android.material.card.MaterialCardView;
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
 import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
 import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
-import static com.smilla.greentooth.GreenApplication.NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.GreenApplication.POST_DISABLE_NOTIFICATIONS_KEY;
+import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.GreenApplication.THEME_KEY;
 import static com.smilla.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
 
@@ -37,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SwitchCompat onSwitch;
     private Spinner timeSpinner;
-    private SwitchCompat notificationsSwitch;
+    private SwitchCompat preDisableNotificationsSwitch;
+    private SwitchCompat postDisableNotificationsSwitch;
+    private BroadcastReceiver broadcastReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
         onSwitch = findViewById(R.id.onSwitch);
         timeSpinner = findViewById(R.id.timeSpinner);
-        notificationsSwitch = findViewById(R.id.notificationsSwitch);
+        preDisableNotificationsSwitch = findViewById(R.id.preDisableNotificationSwitch);
+        postDisableNotificationsSwitch = findViewById(R.id.postDisableNotificationSwitch);
 
         //Set listeners
         onSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -86,10 +95,25 @@ public class MainActivity extends AppCompatActivity {
         View timeClicker = findViewById(R.id.timeClicker);
         timeClicker.setOnClickListener(v -> timeSpinner.performClick());
 
-        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-                sharedPreferences.edit().putBoolean(NOTIFICATIONS_KEY, isChecked).apply());
-        View notifClicker = findViewById(R.id.notifClicker);
-        notifClicker.setOnClickListener(v -> notificationsSwitch.setChecked(!notificationsSwitch.isChecked()));
+        preDisableNotificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                sharedPreferences.edit().putBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, isChecked).apply());
+        View preDisableNotificationClicker = findViewById(R.id.preDisableNotificationClicker);
+        preDisableNotificationClicker.setOnClickListener(v ->
+                preDisableNotificationsSwitch.setChecked(!preDisableNotificationsSwitch.isChecked()));
+
+        postDisableNotificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                sharedPreferences.edit().putBoolean(POST_DISABLE_NOTIFICATIONS_KEY, isChecked).apply());
+        View postDisableNotificationClicker = findViewById(R.id.postDisableNotificationClicker);
+        postDisableNotificationClicker.setOnClickListener(v ->
+                postDisableNotificationsSwitch.setChecked(!postDisableNotificationsSwitch.isChecked()));
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                disableOnSwitch();
+            }
+        };
+        this.registerReceiver(broadcastReceiver, new IntentFilter(GreenApplication.ACTION_SWITCH_OFF));
     }
 
     @Override
@@ -97,7 +121,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         timeSpinner.setSelection(sharedPreferences.getInt(TIME_SPINNER_POSITION_KEY, 0));
         onSwitch.setChecked(sharedPreferences.getBoolean(ENABLED_KEY, false));
-        notificationsSwitch.setChecked(sharedPreferences.getBoolean(NOTIFICATIONS_KEY, false));
+        preDisableNotificationsSwitch.setChecked(sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, false));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -166,5 +196,9 @@ public class MainActivity extends AppCompatActivity {
         Button helpButton = dialog.findViewById(R.id.helpButton);
         helpButton.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+    }
+
+    public void disableOnSwitch() {
+        onSwitch.setChecked(false);
     }
 }
