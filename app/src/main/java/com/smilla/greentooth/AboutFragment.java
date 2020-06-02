@@ -3,6 +3,10 @@ package com.smilla.greentooth;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
@@ -23,11 +27,20 @@ public class AboutFragment extends DialogFragment {
         }
         stringBuilder.append(version);
         stringBuilder.append(getContext().getText(R.string.about_string));
-        builder.setMessage(stringBuilder.toString())
+        final SpannableString message =  new SpannableString(stringBuilder.toString());
+        Linkify.addLinks(message, Linkify.ALL);
+        builder.setMessage(message)
                 .setCancelable(false)
                 .setTitle("About")
                 .setIcon(R.drawable.ic_launcher)
                 .setPositiveButton(R.string.about_button_positive, (dialogInterface, id) -> dialogInterface.dismiss());
         return builder.create();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((TextView) getDialog().findViewById(android.R.id.message))
+                .setMovementMethod(LinkMovementMethod.getInstance());
     }
 }
