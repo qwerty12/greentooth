@@ -105,9 +105,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
                 <TextView
-                    android:id="@+id/waitTitle"
+                    android:id="@+id/delayTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -121,7 +120,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/waitText"
+                    android:id="@+id/delayDesc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -129,27 +128,9 @@
                     android:paddingStart="8dp"
                     android:paddingLeft="8dp"
                     android:text="@string/wait_desc"
-                    app:layout_constraintEnd_toStartOf="@+id/timeSpinner"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/waitTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/delayTitle"
                     tools:ignore="RtlSymmetry" />
-
-                <Spinner
-                    android:id="@+id/timeSpinner"
-                    style="@style/Widget.AppCompat.Spinner"
-                    android:layout_width="@dimen/_130sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="@string/minimum_delay"
-                    android:duplicateParentState="false"
-                    android:entries="@array/wait_entries"
-                    android:spinnerMode="dialog"
-                    app:layout_constraintBottom_toTopOf="@id/divider1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/waitTitle"
-                    app:layout_constraintVertical_bias="0.75" />
 
                 <View
                     android:id="@+id/timeClicker"
@@ -171,14 +152,12 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:alpha="0.2"
                     android:background="@color/colorOnSurface"
+                    android:contentDescription="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/waitText"
-                    android:contentDescription="@null"/>
+                    app:layout_constraintTop_toBottomOf="@+id/delayValue" />
 
                 <TextView
                     android:id="@+id/preDisableNotificationTitle"
@@ -309,6 +288,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.74" />
+
+                <TextView
+                    android:id="@+id/delayValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:padding="8dp"
+                    android:text="20 seconds"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorSecondary"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delayDesc" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

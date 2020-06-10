@@ -19,7 +19,6 @@ public class GreenApplication extends Application {
     public static final String DELAY_KEY = "waitTime";
     public static final String PRE_DISABLE_NOTIFICATIONS_KEY = "preDisableNotificationsEnabled";
     public static final String POST_DISABLE_NOTIFICATIONS_KEY = "postDisableNotificationsEnabled";
-    public static final String TIME_SPINNER_POSITION_KEY = "timeSpinnerPosition";
     public static final String THEME_KEY = "theme";
     public static final String PRE_DISABLE_CHANNEL_ID = "preDisableGreentoothChannel";
     public static final String POST_DISABLE_CHANNEL_ID = "postDisableGreentoothChannel";
@@ -31,6 +30,11 @@ public class GreenApplication extends Application {
     public static final int NOTIFICATION_TYPE_PRE_DISABLE = 0;
     public static final int NOTIFICATION_TYPE_POST_DISABLE = 1;
     public static final int PRE_DISABLE_NOTIFICATION_ID = 999;
+    public static final int DEFAULT_DELAY = 20;
+    public static final int MAX_MINUTE_DELAY = 59;
+    public static final int MIN_MINUTE_DELAY = 0;
+    public static final int MAX_SECOND_DELAY = 59;
+    public static final int MIN_SECOND_DELAY = 0;
 
     @Override
     public void onCreate() {

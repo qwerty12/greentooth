@@ -15,6 +15,7 @@ import androidx.work.WorkManager;
 import java.util.concurrent.TimeUnit;
 
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.DEFAULT_DELAY;
 import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
 import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
 import static com.smilla.greentooth.GreenApplication.NOTIFICATION_TAG;
@@ -34,7 +35,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             boolean greentoothEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
             if (isBluetoothEnabled(bluetoothAdapter) && !isBluetoothConnected(bluetoothAdapter)
                     && !bluetoothAdapter.isDiscovering() && greentoothEnabled) {
-                long waitTime = sharedPreferences.getInt(DELAY_KEY, 20);
+                long waitTime = sharedPreferences.getInt(DELAY_KEY, DEFAULT_DELAY);
                 OneTimeWorkRequest bluetoothWorkRequest = new OneTimeWorkRequest.Builder(
                         BluetoothWorker.class).setInitialDelay(waitTime, TimeUnit.SECONDS).
                         setBackoffCriteria(BackoffPolicy.LINEAR, OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
