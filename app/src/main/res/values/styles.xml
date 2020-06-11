@@ -9,6 +9,7 @@
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorOnPrimarySurface">@color/onPrimarySurfaceColor</item>
         <item name="colorSurface">@color/colorSurface</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
     <style name="ThemeOverlay_Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
@@ -25,5 +26,18 @@
 
     <style name="CustomSwitch" parent="AppTheme">
         <item name="colorControlActivated">@color/switchThumbDisabledColor</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Alert.Button.Negative</item>
+    </style>
+
+    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorSecondary</item>
+    </style>
+
+    <style name="Alert.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorSecondary</item>
     </style>
 </resources>
