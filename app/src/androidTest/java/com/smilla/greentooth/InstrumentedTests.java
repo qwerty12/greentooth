@@ -11,11 +11,14 @@ import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.Checkable;
+import android.widget.NumberPicker;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SdkSuppress;
 import androidx.test.rule.ActivityTestRule;
@@ -26,6 +29,7 @@ import androidx.test.uiautomator.Until;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,7 +38,6 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -42,20 +45,17 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static androidx.work.testing.WorkManagerTestInitHelper.initializeTestWorkManager;
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.DEFAULT_DELAY;
 import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
 import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
 import static com.smilla.greentooth.GreenApplication.POST_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.Util.sendNotification;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
@@ -116,6 +116,27 @@ public class InstrumentedTests {
             public void perform(UiController uiController, View view) {
                 Checkable checkableView = (Checkable) view;
                 checkableView.setChecked(checked);
+            }
+        };
+    }
+
+    public static ViewAction setNumberPickerValue(final int num) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                NumberPicker np = (NumberPicker) view;
+                np.setValue(num);
+
+            }
+
+            @Override
+            public String getDescription() {
+                return "Set the passed number into the NumberPicker";
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(NumberPicker.class);
             }
         };
     }
@@ -201,27 +222,28 @@ public class InstrumentedTests {
         assertFalse(notifEnabled);
     }
 
-    @Test
-    public void userCanSelectTimeSpinnerOptions() {
-        onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
-        for (String selectionText: targetContext.getResources().
-                getStringArray(R.array.wait_entries)) {
-            onView(withId(R.id.timeSpinner)).perform(click());
-            onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
-            onView(withId(R.id.timeSpinner)).check(matches(withSpinnerText(containsString(selectionText))));
-        }
-    }
 
     @Test
-    public void settingsClickerWorksAsSpinner() {
-        onView(withId(R.id.timeSpinner)).perform(ViewActions.scrollTo());
-        for (String selectionText : targetContext.getResources().
-                getStringArray(R.array.wait_entries)) {
-            onView((withId(R.id.timeClicker))).perform(ViewActions.scrollTo()).perform(click());
-            onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
-            onView((withId(R.id.timeSpinner))).perform(ViewActions.scrollTo())
-                                              .check(matches(withSpinnerText(containsString(selectionText))));
-        }
+    public void userCanSetDelays() {
+        final int targetSeconds = 33;
+        final int targetMinutes = 44;
+        setAndCheckDelay(0, 0);
+        setAndCheckDelay(targetSeconds, 0);
+        setAndCheckDelay(0, targetMinutes);
+        setAndCheckDelay(targetSeconds, targetMinutes);
+    }
+
+    private void setAndCheckDelay(int targetSeconds, int targetMinutes) {
+        final int targetDelay = targetMinutes * 60 + targetSeconds;
+        String expectedString = Util.getDelayString(targetContext, targetDelay);
+        onView((withId(R.id.timeClicker))).perform(ViewActions.scrollTo()).perform(click());
+        ViewInteraction secondsInteraction = onView(withId(R.id.secondsPicker));
+        ViewInteraction minutesInteraction = onView(withId(R.id.minutesPicker));
+        secondsInteraction.perform(setNumberPickerValue(targetSeconds));
+        minutesInteraction.perform(setNumberPickerValue(targetMinutes));
+        onView(withText(R.string.okay)).perform(click());
+        assertEquals(targetDelay, sharedPreferences.getInt(DELAY_KEY, DEFAULT_DELAY));
+        onView(withId(R.id.delayValue)).check(matches(withText(expectedString)));
     }
 
     @Test
@@ -231,7 +253,7 @@ public class InstrumentedTests {
         onView(withText(R.string.about_menu_title)).perform(click());
         onView(withId(android.R.id.message))
                 .check(matches(withText(containsString(targetContext.getString(R.string.about_string)))));
-        onView(withText(R.string.about_button_positive)).perform(click());
+        onView(withText(R.string.okay)).perform(click());
     }
 
     public void openThemesMenu() {
@@ -306,11 +328,11 @@ public class InstrumentedTests {
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.text(testTitle)), TIMEOUT);
         //Expand notification if it starts collapsed
-        UiObject2 abortButton = mDevice.findObject(By.desc(targetContext.getString(R.string.abort_button)));
+        UiObject2 abortButton = mDevice.findObject(By.desc(targetContext.getString(R.string.abort_job_button)));
         if (abortButton == null) {
             UiObject2 expandButton = mDevice.findObject(By.res(EXPAND_BUTTON_RES_ID));
             expandButton.click();
-            abortButton = mDevice.findObject(By.desc(targetContext.getString(R.string.abort_button)));
+            abortButton = mDevice.findObject(By.desc(targetContext.getString(R.string.abort_job_button)));
         }
         abortButton.click();
     }

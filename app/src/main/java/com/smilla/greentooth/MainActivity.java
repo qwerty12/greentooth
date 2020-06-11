@@ -13,9 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,18 +28,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
-import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
 import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
 import static com.smilla.greentooth.GreenApplication.POST_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.GreenApplication.THEME_KEY;
-import static com.smilla.greentooth.GreenApplication.TIME_SPINNER_POSITION_KEY;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DelayFragment.DelayInterface {
     private int shortAnimationDuration;
     private SharedPreferences sharedPreferences;
     private SwitchCompat onSwitch;
-    private Spinner timeSpinner;
+    private View timeClicker;
+    private TextView delayValue;
     private SwitchCompat preDisableNotificationsSwitch;
     private SwitchCompat postDisableNotificationsSwitch;
     private BroadcastReceiver broadcastReceiver;
@@ -58,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
         shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         sharedPreferences = this.getSharedPreferences(APP_KEY, 0);
         onSwitch = findViewById(R.id.onSwitch);
-        timeSpinner = findViewById(R.id.timeSpinner);
+        timeClicker = findViewById(R.id.timeClicker);
+        delayValue = findViewById(R.id.delayValue);
         preDisableNotificationsSwitch = findViewById(R.id.preDisableNotificationSwitch);
         postDisableNotificationsSwitch = findViewById(R.id.postDisableNotificationSwitch);
 
@@ -81,19 +79,10 @@ public class MainActivity extends AppCompatActivity {
         MaterialCardView switchCard = findViewById(R.id.switchCard);
         switchCard.setOnClickListener(v -> onSwitch.setChecked(!onSwitch.isChecked()));
 
-        timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int[] values = getApplicationContext().getResources().getIntArray(R.array.wait_values);
-                sharedPreferences.edit().putInt(DELAY_KEY, values[position]).apply();
-                sharedPreferences.edit().putInt(TIME_SPINNER_POSITION_KEY, position).apply();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+        timeClicker.setOnClickListener(v -> {
+            DelayFragment delayFragment = new DelayFragment();
+            delayFragment.show(getSupportFragmentManager(), "CustomDurationFragment");
         });
-        View timeClicker = findViewById(R.id.timeClicker);
-        timeClicker.setOnClickListener(v -> timeSpinner.performClick());
 
         preDisableNotificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
                 sharedPreferences.edit().putBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, isChecked).apply());
@@ -119,9 +108,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        timeSpinner.setSelection(sharedPreferences.getInt(TIME_SPINNER_POSITION_KEY, 0));
+        updateDelayText();
         onSwitch.setChecked(sharedPreferences.getBoolean(ENABLED_KEY, false));
         preDisableNotificationsSwitch.setChecked(sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, false));
+        postDisableNotificationsSwitch.setChecked(sharedPreferences.getBoolean(POST_DISABLE_NOTIFICATIONS_KEY, false));
     }
 
     @Override
@@ -200,5 +190,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void disableOnSwitch() {
         onSwitch.setChecked(false);
+    }
+
+    public void updateDelayText() {
+        updateDelayText(Util.getSaneDelay(sharedPreferences));
+    }
+
+    public void updateDelayText(int delay) {
+        delayValue.setText(Util.getDelayString(this, delay));
     }
 }

@@ -1,3 +1,4 @@
+//TODO: CREATE WRAPPER FUNCTION FOR GETTING DELAY INT FROM SHAREDPREFERENCES
 package com.smilla.greentooth;
 
 import android.annotation.SuppressLint;
@@ -7,13 +8,18 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import static com.smilla.greentooth.GreenApplication.APP_KEY;
+import static com.smilla.greentooth.GreenApplication.DEFAULT_DELAY;
+import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
 import static com.smilla.greentooth.GreenApplication.LAST_NOTIFICATION_ID_KEY;
+import static com.smilla.greentooth.GreenApplication.MAX_MINUTE_DELAY;
+import static com.smilla.greentooth.GreenApplication.MAX_SECOND_DELAY;
 import static com.smilla.greentooth.GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE;
 import static com.smilla.greentooth.GreenApplication.POST_DISABLE_CHANNEL_ID;
 import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_CHANNEL_ID;
@@ -111,7 +117,7 @@ class Util {
             Intent tempDisableIntent = new Intent(context, BluetoothReceiver.class);
             tempDisableIntent.setAction(GreenApplication.ACTION_TEMP_DISABLE);
             PendingIntent tempDisablePendingEvent = PendingIntent.getBroadcast(context, 0, tempDisableIntent, 0);
-            builder.addAction(0, context.getString(R.string.abort_button), tempDisablePendingEvent);
+            builder.addAction(0, context.getString(R.string.abort_job_button), tempDisablePendingEvent);
 
             Intent disableIntent = new Intent(context, BluetoothReceiver.class);
             disableIntent.setAction(GreenApplication.ACTION_DISABLE);
@@ -133,6 +139,37 @@ class Util {
         }
         sharedPreferences.edit().putInt(LAST_NOTIFICATION_ID_KEY, id).apply();
         return id;
+    }
+
+    public static String getDelayString(Context context, int delay) {
+        Resources res = context.getResources();
+        if (delay == 0) {
+            return res.getString(R.string.none);
+        }
+        int minutes = delay / 60;
+        int seconds = delay % 60;
+        String minutesString = res.getQuantityString(R.plurals.minutes_delay, minutes, minutes);
+        String secondsString = res.getQuantityString(R.plurals.seconds_delay, seconds, seconds);
+        String resultString;
+        if ((minutes > 0) && (seconds > 0)) {
+            resultString = String.format("%s %s", minutesString, secondsString);
+        } else if (minutes > 0) {
+            resultString = String.format("%s", minutesString);
+        } else {
+            resultString = String.format("%s", secondsString);
+        }
+        return resultString;
+    }
+
+    public static int getSaneDelay(SharedPreferences sharedPreferences) {
+        int delay = sharedPreferences.getInt(DELAY_KEY, DEFAULT_DELAY);
+        int maxDelay = MAX_MINUTE_DELAY * 60 + MAX_SECOND_DELAY;
+        if (delay > maxDelay) {
+            delay = maxDelay;
+        } else if (delay < 0) {
+            delay = 0;
+        }
+        return delay;
     }
 
 }
