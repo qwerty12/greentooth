@@ -410,6 +410,21 @@ public class InstrumentedTests {
         }
     }
 
+    @Test
+    public void testGetDelayString() {
+        final String none = targetContext.getString(R.string.none);
+        final String minute = targetContext.getString(R.string.minute);
+        final String minutes = targetContext.getString(R.string.minutes);
+        final String second = targetContext.getString(R.string.second);
+        final String seconds = targetContext.getString(R.string.seconds);
+        final int[] testParams = {0, 1, 2, 60, 61, 122};
+        final String[] expectedReturns = {none, "1 " + second, "2 " + seconds, "1 " + minute, "1 " + minute + " 1 " + second,
+                                          "2 " + minutes + " 2 " + seconds};
+        for (int i = 0; i < testParams.length; i++) {
+            assertEquals(expectedReturns[i], Util.getDelayString(targetContext, testParams[i]));
+        }
+    }
+
     public boolean enableBluetooth(final BluetoothAdapter bluetoothAdapter) {
         boolean enabled;
         if (bluetoothAdapter.isEnabled()) {
