@@ -4,11 +4,14 @@
         automatically turning Bluetooth off when you\'re no longer using it.</string>
     <string name="help_2">When the last Bluetooth device has disconnected Greentooth will wait for an adjustable amount
         of time in order to not disturb any connection/reconnection attempts and then deactivate Bluetooth.</string>
-    <string name="help_3">Please note that Greentooth only runs upon device disconnection, it does not do periodical
+    <string name="help_3">Greentooth can optionally show an unobtrusive notification when Bluetooth is about to be turned off, allowing
+        Bluetooth to be kept on temporarily or Greentooth to be disabled entirely. Please be aware that this feature will not work well if
+        the delay is set to a very low value, as there will not be enough time to show the notification.</string>
+    <string name="help_4">Please note that Greentooth only runs upon device disconnection, it does not do periodical
         checks for idle Bluetooth.</string>
-    <string name="post_disable_channel_name">Post disabling notifications</string>
+    <string name="post_disable_channel_name">Post-disabling notifications</string>
     <string name="post_disable_channel_description">Notifications sent after Bluetooth is disabled</string>
-    <string name="pre_disable_channel_name">Pre disabling notifications</string>
+    <string name="pre_disable_channel_name">Pre-disabling notifications</string>
     <string name="pre_disable_channel_description">Notifications sent before Bluetooth is disabled</string>
     <string name="about_string">\n\nCopyright 2020 Nicklas Bergman\nSPDX-License-Identifier: Apache-2.0\n\n
         https://gitlab.com/nbergman/greentooth/</string>
@@ -21,8 +24,8 @@
     <string name="wait_title">Delay</string>
     <string name="wait_desc">Minimum delay before Bluetooth is turned off: </string>
     <string name="pre_disabling_notifications">Notify before disabling</string>
-    <string name="pre_disabling_notifications_desc">Send a low-priority notification before Bluetooth is turned off, with options to keep
-        Bluetooth on temporarily or disable Greentooth entirely.</string>
+    <string name="pre_disabling_notifications_desc">Send a silent notification before Bluetooth is turned off, with options to keep
+        Bluetooth on this time or disable Greentooth entirely.</string>
     <string name="post_disabling_notifications">Notify after disabling</string>
     <string name="post_disabling_notifications_desc">Send a notification after Bluetooth has been turned off.</string>
     <string name="enabled">Enabled</string>
