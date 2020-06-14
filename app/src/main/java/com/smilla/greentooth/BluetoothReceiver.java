@@ -19,6 +19,7 @@ import static com.smilla.greentooth.GreenApplication.DEFAULT_DELAY;
 import static com.smilla.greentooth.GreenApplication.DELAY_KEY;
 import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
 import static com.smilla.greentooth.GreenApplication.NOTIFICATION_TAG;
+import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATION_ID;
 import static com.smilla.greentooth.Util.isBluetoothConnected;
 import static com.smilla.greentooth.Util.isBluetoothEnabled;
@@ -43,8 +44,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 WorkManager.getInstance(context).enqueueUniqueWork("bluetoothJob",
                         ExistingWorkPolicy.KEEP, bluetoothWorkRequest);
                 //Send low-priority notification here too allow user to keep Bluetooth on
-                Util.sendNotification(context, "Bluetooth device disconnected",
-                        "Greentooth will soon disable Bluetooth", GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE);
+                boolean preDisableNotification = sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, false);
+                if (preDisableNotification) {
+                    Util.sendNotification(context, "Bluetooth device disconnected",
+                            "Greentooth will soon disable Bluetooth", GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE);
+                }
             }
         } else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
             //Cancel the pre-disable notification if device becomes connected
