@@ -1,0 +1,2 @@
+* Added custom delay.
+* Added option to show a notification when Bluetooth is about to be turned off, allowing Bluetooth to be kept on temporarily or Greentooth to be disabled entirely.
