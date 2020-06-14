@@ -1,0 +1,1 @@
+* Fixed notifications always being shown before Bluetooth was disabled, without regard for settings.
