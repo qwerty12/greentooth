@@ -46,8 +46,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 //Send low-priority notification here too allow user to keep Bluetooth on
                 boolean preDisableNotification = sharedPreferences.getBoolean(PRE_DISABLE_NOTIFICATIONS_KEY, false);
                 if (preDisableNotification) {
-                    Util.sendNotification(context, "Bluetooth device disconnected",
-                            "Greentooth will soon disable Bluetooth", GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE);
+                    Util.sendNotification(context, context.getString(R.string.pre_disable_notification_title),
+                            context.getString(R.string.pre_disable_notification_body), GreenApplication.NOTIFICATION_TYPE_PRE_DISABLE);
                 }
             }
         } else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {

@@ -39,8 +39,8 @@ public class BluetoothWorker extends Worker {
                 Util.cancelNotification(context, NOTIFICATION_TAG, PRE_DISABLE_NOTIFICATION_ID);
                 boolean postDisableNotificationsEnabled = sharedPreferences.getBoolean(POST_DISABLE_NOTIFICATIONS_KEY, false);
                 if (postDisableNotificationsEnabled) {
-                    Util.sendNotification(context, context.getString(R.string.notification_title),
-                            context.getString(R.string.notification_body), GreenApplication.NOTIFICATION_TYPE_POST_DISABLE);
+                    Util.sendNotification(context, context.getString(R.string.post_disable_notification_title),
+                            context.getString(R.string.post_disable_notification_body), GreenApplication.NOTIFICATION_TYPE_POST_DISABLE);
                 }
                 return Result.success();
             } else {
