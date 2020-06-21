@@ -28,3 +28,13 @@ periodical checks for idle Bluetooth.
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="300">
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="300">
 </div>
+
+## Frequently Asked Questions
+**Greentooth isn't working, what should I do?**
+1. Make sure that the app is enabled and that a reasonable delay is set.
+2. Make sure that your Bluetooth device is actually disconnecting when you think it is and that there are no other Bluetooth devices left connected to your phone or tablet.
+3. Your phone might be preventing Greentooth from launching when a Bluetooth device disconnect is detected. Try whitelisting the app/adding it to the "protected" list in your battery saver settings. Make sure it is allowed to launch from the background. You can find guides on how to do this for many vendors at https://dontkillmyapp.com/.
+
+**I have a Huawei device and the app keeps asking for permission to turn off Bluetooth. What should I do?**
+
+This is an issue with Huawei's own Android customization EMUI and it affects all Bluetooth automation apps, see [issue 6](https://www.gitlab.com/nbergman/greentooth/issues/6). Unfortunately, there doesn't seem to be a way around it at this time.
