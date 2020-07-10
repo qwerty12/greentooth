@@ -30,6 +30,22 @@ periodical checks for idle Bluetooth.
 </div>
 
 ## Frequently Asked Questions
+**Could you make a similar app but for Wi-Fi?**
+
+Several people have suggested an app that works like Greentooth but for Wi-Fi, 
+but unfortunately, it's not possible due to technical reasons.  
+
+  Google doesn't want developers running their apps in the background so they
+changed the rules with later Android versions to make it more difficult.
+Some exceptions were left for things like Bluetooth, which is why Greentooth is
+able to work like it does. However, any app that checks for Wi-Fi usage in a
+similar way would have to be running all the time in the foreground. Obviously
+this is contraproductive to the whole battery saving aspect. It would also have
+to constantly show an annoying notification to let the user know it's running.  
+
+  For these reasons I won't be making an app to turn off Wi-Fi,
+at least not unless Google makes it possible to do it well.
+
 **Greentooth isn't working, what should I do?**
 1. Make sure that the app is enabled and that a reasonable delay is set.
 2. Make sure that your Bluetooth device is actually disconnecting when you think it is and that there are no other Bluetooth devices left connected to your phone or tablet.
