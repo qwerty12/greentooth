@@ -61,4 +61,5 @@
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
+    <string name="greentooth_status">Greentooth Status</string>
 </resources>

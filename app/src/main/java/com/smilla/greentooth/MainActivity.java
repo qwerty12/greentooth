@@ -3,12 +3,14 @@ package com.smilla.greentooth;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.service.quicksettings.TileService;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements DelayFragment.Del
                 changeCardColor(switchCard, switchCardEnabledColor, switchCardDisabledColor);
             }
             updateDescription();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                TileService.requestListeningState(this, new ComponentName(this, OnOffTileService.class));
+            }
         });
         MaterialCardView switchCard = findViewById(R.id.switchCard);
         switchCard.setOnClickListener(v -> onSwitch.setChecked(!onSwitch.isChecked()));
