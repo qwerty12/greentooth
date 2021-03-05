@@ -1,0 +1,1 @@
+Added quick settings tile for turning on/off Greentooth, thank you asdoi. This will be the last update for the time being as I do not have the ability to maintain the app at the moment.

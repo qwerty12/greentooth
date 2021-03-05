@@ -1,5 +1,7 @@
 # <img src="fastlane/metadata/android/en-US/images/icon.png" width="24"> Greentooth
 
+__PLEASE NOTE THAT THIS APP IS NO LONGER MAINTAINED AND MAY NOT WORK ON NEWER ANDROID VERSIONS__
+
 This app disables Bluetooth automatically when the last Bluetooth device has
 been disconnected.
 
