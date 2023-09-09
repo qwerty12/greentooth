@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.quicksettings.TileService;
@@ -34,6 +35,8 @@ import static com.smilla.greentooth.GreenApplication.ENABLED_KEY;
 import static com.smilla.greentooth.GreenApplication.POST_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATIONS_KEY;
 import static com.smilla.greentooth.GreenApplication.THEME_KEY;
+
+import rikka.shizuku.Shizuku;
 
 public class MainActivity extends AppCompatActivity implements DelayFragment.DelayInterface {
     private int shortAnimationDuration;
@@ -108,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements DelayFragment.Del
             }
         };
         this.registerReceiver(broadcastReceiver, new IntentFilter(GreenApplication.ACTION_SWITCH_OFF));
+
+        checkPermission(369);
     }
 
     @Override
@@ -191,6 +196,22 @@ public class MainActivity extends AppCompatActivity implements DelayFragment.Del
         Button helpButton = dialog.findViewById(R.id.helpButton);
         helpButton.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+    }
+
+    private void checkPermission(int code) {
+        if (Shizuku.isPreV11()) {
+            // Pre-v11 is unsupported
+            return;
+        }
+
+        if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED)
+            return;
+
+        if (Shizuku.shouldShowRequestPermissionRationale())
+            return;
+
+        // Request the permission
+        Shizuku.requestPermission(code);
     }
 
     public void disableOnSwitch() {

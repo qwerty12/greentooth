@@ -1,3 +1,11 @@
+Fork of Nicklas Bergman's [Greentooth](https://gitlab.com/nbergman/greentooth) to attempt disabling Bluetooth with Shizuku (i.e. with the `shell` user)
+
+Marginally more useful on Huawei devices, where their regarded changes to ~~Android~~ ~~EMUI~~ HarmonyOS result in you being always being asked to confirm disabling Bluetooth when doing so via external tools, which kinda limits the usefulness of tools such as Greentooth. However, it turns out `svc bluetooth disable` in an ADB shell bypasses the prompt.
+
+Naturally, Shizuku must be running in the background for this to work.
+
+---
+
 # <img src="fastlane/metadata/android/en-US/images/icon.png" width="24"> Greentooth
 
 __PLEASE NOTE THAT THIS APP IS NO LONGER MAINTAINED AND MAY NOT WORK ON NEWER ANDROID VERSIONS__

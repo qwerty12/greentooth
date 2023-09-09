@@ -1,8 +1,11 @@
 package com.smilla.greentooth;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.IBluetoothManager;
+import android.content.AttributionSource;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -15,6 +18,12 @@ import static com.smilla.greentooth.GreenApplication.POST_DISABLE_NOTIFICATIONS_
 import static com.smilla.greentooth.GreenApplication.PRE_DISABLE_NOTIFICATION_ID;
 import static com.smilla.greentooth.Util.isBluetoothConnected;
 import static com.smilla.greentooth.Util.isBluetoothEnabled;
+
+import java.lang.reflect.Constructor;
+
+import rikka.shizuku.Shizuku;
+import rikka.shizuku.ShizukuBinderWrapper;
+import rikka.shizuku.SystemServiceHelper;
 
 public class BluetoothWorker extends Worker {
 
@@ -31,9 +40,24 @@ public class BluetoothWorker extends Worker {
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(APP_KEY, 0);
         boolean greentoothEnabled = sharedPreferences.getBoolean(ENABLED_KEY, false);
-        if (isBluetoothEnabled(bluetoothAdapter) && !isBluetoothConnected(bluetoothAdapter)
-                && !bluetoothAdapter.isDiscovering() && greentoothEnabled) {
-            boolean disabled = bluetoothAdapter.disable();
+        if (greentoothEnabled && isBluetoothEnabled(bluetoothAdapter) && !isBluetoothConnected(bluetoothAdapter)
+                && !bluetoothAdapter.isDiscovering()) {
+            boolean disabled;
+
+            try {
+                final Constructor<?> bluetoothAdapterConstructor = BluetoothAdapter.class.getDeclaredConstructor(IBluetoothManager.class, AttributionSource.class);
+                bluetoothAdapterConstructor.setAccessible(true);
+
+                final AttributionSource attributionSource = (new AttributionSource.Builder(Shizuku.getUid())).setPackageName("com.android.shell").build();
+                final IBluetoothManager BLUETOOTH_MANAGER = IBluetoothManager.Stub.asInterface(new ShizukuBinderWrapper(SystemServiceHelper.getSystemService(BluetoothAdapter.BLUETOOTH_MANAGER_SERVICE)));
+
+                final BluetoothAdapter bluetoothAdapterShell = (BluetoothAdapter) bluetoothAdapterConstructor.newInstance(BLUETOOTH_MANAGER, attributionSource);
+                disabled = bluetoothAdapterShell.disable(true);
+            } catch (Exception e) {
+                Log.w("BluetoothWorker", "Error disabling Bluetooth via Shizuku", e);
+                disabled = bluetoothAdapter.disable();
+            }
+
             if (disabled) {
                 //Remove pre-disable notification if there is one
                 Util.cancelNotification(context, NOTIFICATION_TAG, PRE_DISABLE_NOTIFICATION_ID);

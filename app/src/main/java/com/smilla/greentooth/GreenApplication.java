@@ -6,11 +6,16 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import static android.os.Build.VERSION_CODES.O;
+
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+
+import rikka.sui.Sui;
 
 
 public class GreenApplication extends Application {
@@ -57,6 +62,13 @@ public class GreenApplication extends Application {
                 break;
             case R.id.action_light_theme:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        try {
+            HiddenApiBypass.addHiddenApiExemptions("Landroid/bluetooth/BluetoothAdapter;");
+            Sui.init(getPackageName());
+        } catch (Exception e) {
+            Log.w("GreenApplication", "HiddenApiBypass/Shizuku initialisation failed", e);
         }
     }
 
