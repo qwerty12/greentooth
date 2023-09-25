@@ -1,5 +1,6 @@
 package com.smilla.greentooth;
 
+import android.app.IActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.IBluetoothManager;
 import android.content.AttributionSource;
@@ -53,6 +54,14 @@ public class BluetoothWorker extends Worker {
 
                 final BluetoothAdapter bluetoothAdapterShell = (BluetoothAdapter) bluetoothAdapterConstructor.newInstance(BLUETOOTH_MANAGER, attributionSource);
                 disabled = bluetoothAdapterShell.disable(true);
+
+                if (disabled) {
+                    try {
+                        final IActivityManager ACTIVITY_MANAGER = IActivityManager.Stub.asInterface(
+                                new ShizukuBinderWrapper(SystemServiceHelper.getSystemService(Context.ACTIVITY_SERVICE)));
+                        ACTIVITY_MANAGER.forceStopPackage("com.spotify.lite", 0);
+                    } catch (Exception ignored) {}
+                }
             } catch (Exception e) {
                 Log.w("BluetoothWorker", "Error disabling Bluetooth via Shizuku", e);
                 disabled = bluetoothAdapter.disable();
